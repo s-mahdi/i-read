@@ -1,0 +1,14 @@
+{
+  "name": "@quran/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nrwl/next": "^18.3.4",
+    "@nx/js": "18.3.4",
+    "@nx/workspace": "18.3.4",
+    "nx": "18.3.4"
+  }
+}
