@@ -1,0 +1,44 @@
+{
+  "name": "front-end",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/front-end",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project front-end --web",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/next:build",
+      "options": {
+        "root": "apps/front-end",
+        "outputPath": "dist/apps/front-end"
+      },
+      "configurations": {
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "front-end:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "front-end:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "front-end:build:production",
+          "dev": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/front-end/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}
