@@ -27,10 +27,10 @@ export class CreateUserDto {
 
   @IsString({ message: 'رمز عبور باید به صورت رشته باشد.' })
   @IsNotEmpty({ message: 'وارد کردن رمز عبور الزامی است.' })
-  @Matches(passwordRegEx, {
-    message:
-      'رمز عبور باید بین ۸ تا ۲۰ کاراکتر باشد و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک نویسه خاص باشد.',
-  })
+  // @Matches(passwordRegEx, {
+  //   message:
+  //     'رمز عبور باید بین ۸ تا ۲۰ کاراکتر باشد و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک نویسه خاص باشد.',
+  // })
   password: string;
 
   @IsEnum(['admin', 'user'], { message: 'نقش باید "admin" یا "user" باشد.' })
