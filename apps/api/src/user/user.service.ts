@@ -24,6 +24,7 @@ export class UserService {
   createUser(createUserDto: CreateUserDto): Promise<User> {
     const user: User = new User();
     user.name = createUserDto.name;
+    user.lastName = createUserDto.lastName;
     user.username = createUserDto.username;
     user.password = createUserDto.password;
     return this.userRepository.save(user);
@@ -42,7 +43,7 @@ export class UserService {
    * @param id is type of number, which represent the id of user.
    * @returns promise of user
    */
-  viewUser(id: number): Promise<User> {
+  findOne(id: number): Promise<User> {
     return this.userRepository.findOneBy({ id });
   }
 
