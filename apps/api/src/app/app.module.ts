@@ -6,6 +6,9 @@ import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from '../config/jwt.config';
 import { User } from '../user/entities/user.entity';
+import { AuthModule } from '../auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from '../auth/guards/auth.guard';
 
 @Module({
   imports: [
@@ -21,9 +24,16 @@ import { User } from '../user/entities/user.entity';
       logging: true,
     }),
     UserModule,
+    AuthModule,
     JwtModule.register(jwtConstants),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
