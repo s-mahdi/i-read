@@ -7,11 +7,13 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 interface IForm {
+  name: string;
+  lastName: string;
   username: string;
   password: string;
 }
 
-export default function Index() {
+export default function SignUpPage() {
   const router = useRouter();
   const {
     handleSubmit,
@@ -25,8 +27,8 @@ export default function Index() {
     // Add your login logic here, such as calling an API
   };
 
-  const onSignUpClick = () => {
-    router.push('/signup');
+  const onLoginClick = () => {
+    router.push('/login');
   };
 
   return (
@@ -41,6 +43,30 @@ export default function Index() {
             className="flex flex-col space-y-6"
             onSubmit={handleSubmit(onSubmit)}
           >
+            <div>
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: 'نام الزامی است' }}
+                render={({ field }) => <Input {...field} placeholder="نام" />}
+              />
+              {errors.username && (
+                <p className="text-red-500">{errors.username.message}</p>
+              )}
+            </div>
+            <div>
+              <Controller
+                name="lastName"
+                control={control}
+                rules={{ required: 'نام خانوادگی الزامی است' }}
+                render={({ field }) => (
+                  <Input {...field} placeholder="نام خانوادگی" />
+                )}
+              />
+              {errors.username && (
+                <p className="text-red-500">{errors.username.message}</p>
+              )}
+            </div>
             <div>
               <Controller
                 name="username"
@@ -67,20 +93,22 @@ export default function Index() {
                 <p className="text-red-500">{errors.password.message}</p>
               )}
             </div>
+
             <button
               type="submit"
               className="bg-primary w-full h-12 rounded-lg text-white"
             >
-              ورود
+              ثبت نام
             </button>
+
             <p className="text-center font-light">
-              هنوز عضو نیستید؟{' '}
+              عضو هستید؟{' '}
               <button
                 type="button"
-                onClick={onSignUpClick}
+                onClick={onLoginClick}
                 className="text-primary hover:underline hover"
               >
-                ثبت نام کنید
+                وارد شوید
               </button>
             </p>
           </form>
