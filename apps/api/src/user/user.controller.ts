@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,6 +24,13 @@ export class UserController {
   @Get()
   findAll() {
     return this.userService.findAllUser();
+  }
+
+  @Get('/profile')
+  async findByToken(@Request() req) {
+    const userId = req.user.userId;
+    const user = await this.userService.findOne(userId);
+    return user;
   }
 
   @Get(':id')
