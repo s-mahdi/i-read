@@ -13,6 +13,7 @@ dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // TODO use env variable and remove 4200 in production
   app.enableCors({ origin: ['http://localhost:4200'] });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);

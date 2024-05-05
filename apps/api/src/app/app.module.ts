@@ -9,6 +9,8 @@ import { User } from '../user/entities/user.entity';
 import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { VersesModule } from '../verses/verses.module';
+import { Verse } from '../verses/entities/verse.entity';
 
 @Module({
   imports: [
@@ -19,12 +21,13 @@ import { AuthGuard } from '../auth/guards/auth.guard';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, Verse],
       synchronize: process.env.TYPEORM_SYNC === 'true', // Controlled by environment variable
       logging: true,
     }),
     UserModule,
     AuthModule,
+    VersesModule,
     JwtModule.register(jwtConstants),
   ],
   controllers: [AppController],
