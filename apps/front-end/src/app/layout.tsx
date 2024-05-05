@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import localFont from '@next/font/local';
 import './global.css';
 import ReactQueryProvider from '@/state/ReactQueryProvider';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
 
 const yekan = localFont({
   src: [
@@ -25,7 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ReactQueryProvider>
-        <body className={`${yekan.variable} font-sans`}>{children}</body>
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          <ThemeProvider theme={theme}>
+            <body className={`${yekan.variable} font-sans`}>{children}</body>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </ReactQueryProvider>
     </html>
   );

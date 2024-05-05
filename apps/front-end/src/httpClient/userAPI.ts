@@ -1,5 +1,6 @@
+import { IUser } from '@/@types/Iuser';
 import { axiosClient } from './axios';
 
 export const userAPI = {
-  getUser: (id: string) => axiosClient.get(`/user/${id}`),
+  getProfile: () => axiosClient.get<IUser>(`/user/profile`),
 };
