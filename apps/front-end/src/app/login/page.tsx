@@ -1,6 +1,7 @@
 'use client';
 
 import { Input } from '@/components';
+import { authAPI } from '@/httpClient/authAPI';
 import { AuthLayout } from '@/layouts/authLayout';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -19,10 +20,14 @@ export default function Index() {
     control,
   } = useForm<IForm>();
 
-  // Function to handle form submission
-  const onSubmit = (data: IForm) => {
-    console.log('Form Data:', data);
-    // Add your login logic here, such as calling an API
+  const onSubmit = async ({ username, password }: IForm) => {
+    try {
+      const { data } = await authAPI.login(username, password);
+      localStorage.setItem('jwtToken', data.access_token);
+      router.replace('/');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const onSignUpClick = () => {
