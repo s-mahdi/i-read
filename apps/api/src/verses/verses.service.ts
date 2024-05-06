@@ -87,7 +87,7 @@ export class VersesService {
         verse.order = parseInt(order);
         verse.translation = translation;
         verse.text = originalLine.split('|')[2];
-        verse.audioUrl = `https://github.com/semarketir/quranjson/blob/master/source/audio/${this.padWithZeros(
+        verse.audioUrl = `https://github.com/semarketir/quranjson/raw/master/source/audio/${this.padWithZeros(
           suraId,
           3
         )}/${this.padWithZeros(order, 3)}.mp3`;

@@ -11,6 +11,8 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { VersesModule } from '../verses/verses.module';
 import { Verse } from '../verses/entities/verse.entity';
+import { HttpModule } from '@nestjs/axios';
+import { ProxyController } from '../proxy/proxy.controller';
 
 @Module({
   imports: [
@@ -28,9 +30,10 @@ import { Verse } from '../verses/entities/verse.entity';
     UserModule,
     AuthModule,
     VersesModule,
+    HttpModule,
     JwtModule.register(jwtConstants),
   ],
-  controllers: [AppController],
+  controllers: [AppController, ProxyController],
   providers: [
     AppService,
     {
