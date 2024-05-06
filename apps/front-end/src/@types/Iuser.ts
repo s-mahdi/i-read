@@ -7,4 +7,10 @@ export interface IUser {
   lastName: string;
   role: ERole;
   readVerses: Array<any>;
+  schedule: Array<{
+    date: string;
+    isRead: boolean;
+    suraList: string[];
+    startVerseId: number;
+  }>;
 }
