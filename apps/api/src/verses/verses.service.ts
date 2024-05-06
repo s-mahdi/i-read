@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Verse } from './entities/verse.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as readline from 'readline';
 import { UpdateVerseDto } from './dto/update-verse.dto';
 import { join } from 'path';
-import { zipAsync } from '../functions/zipAsync';
+import { zipAsync } from '../utils/zipAsync';
 import { quranIndex } from '../assets/quranIndex';
 
 @Injectable()
@@ -33,6 +33,18 @@ export class VersesService {
   }
   update(id: number, verse: UpdateVerseDto) {
     return verse;
+  }
+
+  async getSuraListFromStartVerseId(
+    startVerseId: number,
+    count: number
+  ): Promise<string[]> {
+    const verses = await this.verseRepository.find({
+      where: { id: Between(startVerseId, startVerseId + count - 1) },
+      order: { id: 'ASC' },
+    });
+    const uniqueSuras = new Set(verses.map((verse) => verse.sura));
+    return Array.from(uniqueSuras);
   }
 
   async importVersesFromFiles(): Promise<{
@@ -68,7 +80,6 @@ export class VersesService {
         originalLines,
         translationLines
       )) {
-        console.log('Importing verse:', i + 1);
         const [suraId, order, translation] = translationLine.split('|');
         const verse = new Verse();
         verse.id = i + 1; // Assuming line number starts at 1
@@ -83,11 +94,8 @@ export class VersesService {
         const id = parseInt(suraId) - 1;
         verse.sura = quranIndex[id].titleAr;
 
-        console.log('Verse object:', verse);
-
         try {
           await this.verseRepository.save(verse);
-          console.log('Verse saved successfully');
         } catch (error) {
           console.error('Error saving verse:', error);
         }

@@ -8,5 +8,6 @@ import { Verse } from './entities/verse.entity';
   imports: [TypeOrmModule.forFeature([Verse])],
   controllers: [VersesController],
   providers: [VersesService],
+  exports: [VersesService],
 })
 export class VersesModule {}

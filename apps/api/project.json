@@ -19,6 +19,10 @@
           "buildTarget": "api:build:production"
         }
       }
+    },
+    "migrate": {
+      "executor": "@nestjs/schematics:migrate",
+      "options": {}
     }
   }
 }

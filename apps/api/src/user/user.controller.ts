@@ -28,7 +28,7 @@ export class UserController {
 
   @Get('/profile')
   async findByToken(@Request() req) {
-    const userId = req.user.userId;
+    const userId = req.user.sub;
     const user = await this.userService.findOne(userId);
     return user;
   }
@@ -55,4 +55,6 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.removeUser(+id);
   }
+
+  // TODO add /schedule end point and remove `schedule` from GET profile
 }

@@ -8,7 +8,7 @@ export class Verse {
   @Column()
   order: number;
 
-  @Column({ nullable: true })
+  @Column()
   sura: string;
 
   @Column()

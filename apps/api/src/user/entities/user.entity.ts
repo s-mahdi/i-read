@@ -36,4 +36,12 @@ export class User {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column({ type: 'jsonb', default: [] })
+  schedule: {
+    date: string;
+    isRead: boolean;
+    suraList: string[];
+    startVerseId: number;
+  }[];
 }

@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { getNextNonHolidayDates } from '../utils/calendarUtils';
+import { VersesService } from '../verses/verses.service';
 
 @Injectable()
 export class UserService {
@@ -12,7 +14,8 @@ export class UserService {
    * injecting repository here. Another approch can be Active records.
    */
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly versesService: VersesService
   ) {}
 
   /**
@@ -21,12 +24,31 @@ export class UserService {
    * we have defined what are the keys we are expecting from body
    * @returns promise of user
    */
-  createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     const user: User = new User();
     user.name = createUserDto.name;
     user.lastName = createUserDto.lastName;
     user.username = createUserDto.username;
     user.password = createUserDto.password;
+
+    const startDate = new Date();
+    const nonHolidayDates = await getNextNonHolidayDates(startDate, 125);
+    user.schedule = await Promise.all(
+      nonHolidayDates.map(async (date, index) => {
+        const startVerseId = 1 + 50 * index;
+        const suraList = await this.versesService.getSuraListFromStartVerseId(
+          startVerseId,
+          50
+        );
+        return {
+          date: date.toISOString(),
+          isRead: false,
+          startVerseId: startVerseId,
+          suraList: suraList,
+        };
+      })
+    );
+
     return this.userRepository.save(user);
   }
 
@@ -44,7 +66,7 @@ export class UserService {
    * @returns promise of user
    */
   findOne(id: number): Promise<User> {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOneByOrFail({ id });
   }
 
   findOneByUserName(username: string): Promise<User> {
