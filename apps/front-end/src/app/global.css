@@ -16,6 +16,21 @@
   }
 }
 
+@font-face {
+  font-family: 'Taha';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../public/fonts/Taha.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Yekan';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('../../public/fonts/Yekan.ttf') format('ttf');
+}
+
 body {
   direction: rtl;
   color: rgb(var(--foreground-rgb));

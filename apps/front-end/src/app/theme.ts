@@ -2,9 +2,6 @@
 
 import { createTheme } from '@mui/material/styles';
 
-// TODO fix font
-const fontURL = '../../public/fonts/Yekan.ttf';
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -12,20 +9,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Yekan, Arial',
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: `
-        @font-face {
-          font-family: 'Yekan';
-          font-style: normal;
-          font-display: swap;
-          font-weight: 400;
-          src: local('Raleway'), local('Raleway-Regular'), url('${fontURL}') format('ttf');
-        }
-      `,
-    },
+    fontFamily: ['Yekan', 'Taha', 'Arial', 'sans-serif'].join(','),
   },
 });
 

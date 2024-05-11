@@ -9,9 +9,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 interface IProps {
   user: IUser;
+  children?: React.ReactNode;
 }
 
-export const Navbar: React.FC<IProps> = ({ user }) => {
+export const Navbar: React.FC<IProps> = ({ user, children }) => {
   const router = useRouter();
   const [isBoxOpen, setIsBoxOpen] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
@@ -55,29 +56,34 @@ export const Navbar: React.FC<IProps> = ({ user }) => {
             <MemoLogo fontSize={48} />
             <p className="text-white">من قرآن می‌خوانم</p>
           </div>
-          <Box
-            ref={boxRef}
-            className="flex items-center gap-x-2 relative"
-            component="button"
-            onClick={() => setIsBoxOpen(!isBoxOpen)}
-          >
-            <Avatar sx={{ bgcolor: 'primary.main', mr: 1, cursor: 'pointer' }}>
-              <PersonIcon />
-            </Avatar>
-            <KeyboardArrowDownIcon sx={{ fill: 'white' }} />
-            <p className="text-white">{`${user.name} ${user.lastName}`}</p>
-            {isBoxOpen && (
-              <Box
-                className="w-64 absolute left-0 top-[64px] border border-gray-300 bg-white p-4 rounded-xl shadow-lg"
-                zIndex={10}
+          <div className="flex gap-x-4">
+            <div className="hidden md:flex gap-x-2">{children}</div>
+            <Box
+              ref={boxRef}
+              className="flex items-center gap-x-2 relative"
+              component="button"
+              onClick={() => setIsBoxOpen(!isBoxOpen)}
+            >
+              <Avatar
+                sx={{ bgcolor: 'primary.main', mr: 1, cursor: 'pointer' }}
               >
-                <Button className="flex" onClick={onSignOut}>
-                  <ExitToApp className="ml-4" />
-                  خروج از حساب کاربری
-                </Button>
-              </Box>
-            )}
-          </Box>
+                <PersonIcon />
+              </Avatar>
+              <KeyboardArrowDownIcon sx={{ fill: 'white' }} />
+              <p className="text-white">{`${user.name} ${user.lastName}`}</p>
+              {isBoxOpen && (
+                <Box
+                  className="w-64 absolute left-0 top-[64px] border border-gray-300 bg-white p-4 rounded-xl shadow-lg"
+                  zIndex={10}
+                >
+                  <Button className="flex" onClick={onSignOut}>
+                    <ExitToApp className="ml-4" />
+                    خروج از حساب کاربری
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </div>
         </Toolbar>
       </Container>
     </AppBar>

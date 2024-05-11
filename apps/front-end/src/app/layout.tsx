@@ -15,6 +15,15 @@ const yekan = localFont({
   variable: '--font-yekan',
 });
 
+const taha = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Taha.ttf',
+    },
+  ],
+  variable: '--font-taha',
+});
+
 export const metadata: Metadata = {
   title: 'من قرآن میخوانم',
   description: 'قرآت روزانه ۵۰ آیه از قرآن کریم',
@@ -30,7 +39,9 @@ export default function RootLayout({
       <ReactQueryProvider>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
-            <body className={`${yekan.variable} font-sans`}>{children}</body>
+            <body className={`${yekan.variable} ${taha.variable} font-sans`}>
+              {children}
+            </body>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </ReactQueryProvider>

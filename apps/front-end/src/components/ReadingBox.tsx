@@ -50,13 +50,13 @@ export const ReadingBox = ({ sura, verses }: IProps) => {
   };
 
   return (
-    <div className="shadow-xl rounded-2xl overflow-hidden">
+    <div className="shadow-xl rounded-2xl overflow-hidden ">
       <div className="bg-gray-100 p-4">
         <p className="font-semibold text-lg text-gray-800 text-center">
           {sura}
         </p>
       </div>
-      <div className="flex flex-col bg-white gap-y-8 p-8">
+      <div className="flex flex-col bg-white bg-opacity-85 gap-y-8 p-8">
         {verses.map(({ text, translation, order, audioUrl }, index) => (
           <div
             ref={(el) => (verseRefs.current[index] = el)}
@@ -82,7 +82,7 @@ export const ReadingBox = ({ sura, verses }: IProps) => {
                 </span>
                 <VerseIcon fontSize={40} />
               </div>
-              <Typography className="text-3xl">{text}</Typography>
+              <Typography className="text-4xl font-taha">{text}</Typography>
             </div>
             <p>{`${toIndiaDigits(order)}. ${translation}`}</p>
             <div className="flex flex-row-reverse">

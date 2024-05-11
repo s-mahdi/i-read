@@ -20,6 +20,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-yekan)'],
+        taha: ['var(--font-taha)'],
       },
     },
   },
