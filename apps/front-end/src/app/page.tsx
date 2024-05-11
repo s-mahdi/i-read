@@ -26,12 +26,12 @@ function HomePage() {
       <Navbar user={data} />
       <Container className="py-8">
         <Grid container spacing={3}>
-          {data.schedule.map(({ date, suraList, startVerseId }, index) => (
+          {data.schedule.map(({ date, suraList }, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <DayCard
                 date={new Date(date)}
                 suraList={suraList.join(', ')}
-                onClick={() => onCardClick(startVerseId)}
+                onClick={() => onCardClick(index + 1)}
               />
             </Grid>
           ))}

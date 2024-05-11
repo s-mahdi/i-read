@@ -1,17 +1,12 @@
 'use client';
 
+import { ISignUpFormParams } from '@/@types/ISignUpFormParams';
 import { Input } from '@/components';
 import MemoLogo from '@/components/Logo';
+import { useSignUpAPI } from '@/state/useSignUpAPI';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-
-interface IForm {
-  name: string;
-  lastName: string;
-  username: string;
-  password: string;
-}
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -19,12 +14,19 @@ export default function SignUpPage() {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<IForm>();
+  } = useForm<ISignUpFormParams>();
 
-  // Function to handle form submission
-  const onSubmit = (data: IForm) => {
-    console.log('Form Data:', data);
-    // Add your login logic here, such as calling an API
+  const { mutateAsync } = useSignUpAPI();
+
+  const onSubmit = async ({ rank, ...variables }: ISignUpFormParams) => {
+    try {
+      // @ts-ignore
+      const { data } = await mutateAsync(variables);
+      localStorage.setItem('jwtToken', data.access_token);
+      router.replace('/');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const onLoginClick = () => {
@@ -90,6 +92,19 @@ export default function SignUpPage() {
                 <p className="text-red-500">{errors.username.message}</p>
               )}
             </div>
+
+            <div>
+              <Controller
+                name="rank"
+                control={control}
+                rules={{ required: 'شماره پرسنلی الزامی است' }}
+                render={({ field }) => <Input {...field} placeholder="درجه" />}
+              />
+              {errors.username && (
+                <p className="text-red-500">{errors.username.message}</p>
+              )}
+            </div>
+
             <div>
               <Controller
                 name="password"

@@ -30,6 +30,7 @@ export class UserService {
     user.lastName = createUserDto.lastName;
     user.username = createUserDto.username;
     user.password = createUserDto.password;
+    user.rank = createUserDto.rank;
 
     const startDate = new Date();
     const nonHolidayDates = await getNextNonHolidayDates(startDate, 125);
@@ -96,21 +97,5 @@ export class UserService {
    */
   removeUser(id: number): Promise<{ affected?: number }> {
     return this.userRepository.delete(id);
-  }
-
-  async addUserReadVerses(userId: number, verseIds: number[]): Promise<User> {
-    // Find the user by ID
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-
-    // Throw NotFoundException if user is not found
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    // Add new verse IDs to the user's readVerses array
-    user.readVerses.push(...verseIds);
-
-    // Save the updated user to the database
-    return this.userRepository.save(user);
   }
 }

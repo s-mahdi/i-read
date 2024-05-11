@@ -43,14 +43,6 @@ export class UserController {
     return this.userService.updateUser(+id, updateUserDto);
   }
 
-  @Patch(':id/add-verses')
-  addUserReadVerses(
-    @Param('id') id: string,
-    @Body('verseIds') verseIds: number[]
-  ) {
-    return this.userService.addUserReadVerses(+id, verseIds);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.removeUser(+id);

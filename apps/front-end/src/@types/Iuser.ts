@@ -6,6 +6,7 @@ export interface IUser {
   name: string;
   lastName: string;
   role: ERole;
+  rank: string;
   readVerses: Array<any>;
   schedule: Array<{
     date: string;
