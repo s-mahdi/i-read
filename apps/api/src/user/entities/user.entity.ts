@@ -24,15 +24,15 @@ export class User {
   @Column()
   lastName: string;
 
+  @Column({ nullable: true })
+  rank: string;
+
   @Column({
     type: 'enum',
-    enum: ['admin', 'user'],
+    enum: ['admin', 'user', 'employee'],
     default: 'user',
   })
   role: string;
-
-  @Column('int', { array: true, default: [] })
-  readVerses: number[];
 
   @CreateDateColumn()
   createdAt: Date;
