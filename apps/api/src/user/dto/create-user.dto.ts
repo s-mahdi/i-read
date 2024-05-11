@@ -34,7 +34,6 @@ export class CreateUserDto {
   password: string;
 
   @IsString({ message: 'درجه باید به صورت رشته متنی باشد.' })
-  @IsNotEmpty({ message: 'وارد کردن درجه الزامی است.' })
   rank: string;
 
   @IsEnum(['admin', 'user'], { message: 'نقش باید "admin" یا "user" باشد.' })
