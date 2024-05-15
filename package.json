@@ -32,6 +32,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.11.5",
+    "pm2": "^5.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.3",
@@ -48,7 +49,10 @@
     "build:front-end": "nx build front-end",
     "copy-env:api": "shx cp apps/api/.env dist/apps/api/",
     "copy-env:front-end": "shx cp apps/front-end/.env dist/apps/front-end/",
-    "build:all": "npm run build:api && npm run copy-env:api && npm run build:front-end && npm run copy-env:front-end"
+    "build-and-copy": "npm run build:api && npm run copy-env:api && npm run build:front-end && npm run copy-env:front-end",
+    "serve-prod:api": "pm2 start dist/apps/api/main.js --name api",
+    "serve-prod:front-end": "pm2 start 'nx serve front-end --configuration=production' --name front-end",
+    "serve:all": "npm run serve-prod:api && npm run serve-prod:front-end"
   },
   "devDependencies": {
     "@nestjs/schematics": "^10.0.1",
