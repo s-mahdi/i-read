@@ -13,9 +13,16 @@ import { VersesModule } from '../verses/verses.module';
 import { Verse } from '../verses/entities/verse.entity';
 import { HttpModule } from '@nestjs/axios';
 import { ProxyController } from '../proxy/proxy.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: join(__dirname, '..', '.env'),
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -24,7 +31,7 @@ import { ProxyController } from '../proxy/proxy.controller';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [User, Verse],
-      synchronize: process.env.TYPEORM_SYNC === 'true', // Controlled by environment variable
+      synchronize: true,
       logging: true,
     }),
     UserModule,
@@ -32,6 +39,10 @@ import { ProxyController } from '../proxy/proxy.controller';
     VersesModule,
     HttpModule,
     JwtModule.register(jwtConstants),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'api', 'assets', 'audio'),
+      serveRoot: '/api/audio',
+    }),
   ],
   controllers: [AppController, ProxyController],
   providers: [
