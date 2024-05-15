@@ -27,6 +27,9 @@ export class User {
   @Column({ nullable: true })
   rank: string;
 
+  @Column({ nullable: true })
+  nationalCode: number;
+
   @Column({
     type: 'enum',
     enum: ['admin', 'user', 'employee'],

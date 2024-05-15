@@ -7,6 +7,9 @@ const theme = createTheme({
     primary: {
       main: '#32B7C5',
     },
+    text: {
+      primary: '#000000',
+    },
   },
   typography: {
     fontFamily: ['Yekan', 'Taha', 'Arial', 'sans-serif'].join(','),

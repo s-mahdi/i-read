@@ -69,9 +69,7 @@ export const ReadingBox = ({ sura, verses }: IProps) => {
           >
             <audio
               ref={(el) => (audioRefs.current[index] = el!)}
-              src={`${
-                process.env.NEXT_PUBLIC_API_URL
-              }/proxy?url=${encodeURIComponent(audioUrl)}`}
+              src={`${process.env.NEXT_PUBLIC_API_URL}${audioUrl}`}
               crossOrigin="anonymous"
               onEnded={() => handleAudioEnded(index)}
             />

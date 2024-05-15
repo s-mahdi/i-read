@@ -6,7 +6,7 @@ export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({
   return (
     <input
       dir="rtl"
-      className={`w-full h-12 border-solid border rounded-lg border-slate-300 px-2 ${props.className}`}
+      className={`w-full h-12 border-solid border rounded-lg border-slate-300 px-2 text-black ${props.className}`}
       {...props}
     />
   );

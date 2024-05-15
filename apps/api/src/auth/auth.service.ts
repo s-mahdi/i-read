@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForgetPasswordDto } from './../user/dto/forget-password.dto';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -27,5 +32,20 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async resetPassword({
+    username,
+    nationalCode,
+    newPassword,
+  }: ForgetPasswordDto): Promise<void> {
+    const user = await this.userService.findOneByUserName(username);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (user.nationalCode !== nationalCode) {
+      throw new UnauthorizedException('Invalid national code');
+    }
+    await this.userService.updatePassword(user.id, newPassword);
   }
 }

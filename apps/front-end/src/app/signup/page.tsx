@@ -18,9 +18,8 @@ export default function SignUpPage() {
 
   const { mutateAsync } = useSignUpAPI();
 
-  const onSubmit = async ({ rank, ...variables }: ISignUpFormParams) => {
+  const onSubmit = async (variables: ISignUpFormParams) => {
     try {
-      // @ts-ignore
       const { data } = await mutateAsync(variables);
       localStorage.setItem('jwtToken', data.access_token);
       router.replace('/');
@@ -47,10 +46,8 @@ export default function SignUpPage() {
 
       <div className="w-96 p-4 mx-auto my-auto flex flex-col">
         <div className="space-y-4">
-          <div>
-            <h2 className="font-bold">خوش آمدید</h2>
-            <p className="text-neutral-500">قرائت روزانه ۵۰ آیه از قرآن کریم</p>
-          </div>
+          <h2 className="font-bold">ثبت نام</h2>
+
           <form
             className="flex flex-col space-y-6"
             onSubmit={handleSubmit(onSubmit)}
@@ -62,8 +59,8 @@ export default function SignUpPage() {
                 rules={{ required: 'نام الزامی است' }}
                 render={({ field }) => <Input {...field} placeholder="نام" />}
               />
-              {errors.username && (
-                <p className="text-red-500">{errors.username.message}</p>
+              {errors.name && (
+                <p className="text-red-500">{errors.name.message}</p>
               )}
             </div>
             <div>
@@ -75,8 +72,8 @@ export default function SignUpPage() {
                   <Input {...field} placeholder="نام خانوادگی" />
                 )}
               />
-              {errors.username && (
-                <p className="text-red-500">{errors.username.message}</p>
+              {errors.lastName && (
+                <p className="text-red-500">{errors.lastName.message}</p>
               )}
             </div>
             <div>
@@ -95,13 +92,27 @@ export default function SignUpPage() {
 
             <div>
               <Controller
+                name="nationalCode"
+                control={control}
+                rules={{ required: 'کد ملی الزامی است.' }}
+                render={({ field }) => (
+                  <Input {...field} type="number" placeholder="کد ملی" />
+                )}
+              />
+              {errors.nationalCode && (
+                <p className="text-red-500">{errors.nationalCode.message}</p>
+              )}
+            </div>
+
+            <div>
+              <Controller
                 name="rank"
                 control={control}
-                rules={{ required: 'شماره پرسنلی الزامی است' }}
+                rules={{ required: 'درجه الزامی است' }}
                 render={({ field }) => <Input {...field} placeholder="درجه" />}
               />
-              {errors.username && (
-                <p className="text-red-500">{errors.username.message}</p>
+              {errors.rank && (
+                <p className="text-red-500">{errors.rank.message}</p>
               )}
             </div>
 

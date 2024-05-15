@@ -7,6 +7,7 @@ import {
   ArrayUnique,
   IsNumber,
 } from 'class-validator';
+import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
 
 const passwordRegEx =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
@@ -33,14 +34,14 @@ export class CreateUserDto {
   // })
   password: string;
 
+  @IsNotEmpty({ message: 'وارد کردن کد ملی الزامی است.' })
+  @IsNumber({}, { message: 'کد ملی باید به صورت عدد باشد.' })
+  @IsValidNationalCode({ message: 'کد ملی نامعتبر است.' })
+  nationalCode: number;
+
   @IsString({ message: 'درجه باید به صورت رشته متنی باشد.' })
   rank: string;
 
-  @IsEnum(['admin', 'user'], { message: 'نقش باید "admin" یا "user" باشد.' })
+  @IsEnum(['admin', 'user', 'employee'], { message: 'نقش وارد شده صحیح نیست' })
   role: string;
-
-  @IsArray({ message: 'خواندن آیات باید به صورت آرایه باشد.' })
-  @ArrayUnique({ message: 'آیات خوانده شده باید منحصر به فرد باشند.' })
-  @IsNumber({}, { each: true, message: 'هر شناسه آیه باید یک عدد باشد.' })
-  readVerses: number[];
 }

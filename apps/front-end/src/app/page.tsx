@@ -6,12 +6,20 @@ import { Navbar } from '@/components/Navbar';
 import { useProfileAPI } from '@/state/useProfile';
 import { Box, CircularProgress, Container, Grid } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 function HomePage() {
   const { data, isLoading } = useProfileAPI();
   const router = useRouter();
 
   const onCardClick = (verseId: number) => router.push(`/${verseId}`);
+
+  useEffect(() => {
+    const jwtToken = localStorage.getItem('jwtToken');
+    if (!jwtToken) {
+      router.push('/login');
+    }
+  }, [router]);
 
   if (!data || isLoading) {
     return (

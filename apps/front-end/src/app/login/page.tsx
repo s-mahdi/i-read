@@ -4,34 +4,61 @@ import { Input } from '@/components';
 import MemoLogo from '@/components/Logo';
 import { authAPI } from '@/httpClient/authAPI';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 interface IForm {
   username: string;
   password: string;
 }
 
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Index() {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
   const {
     handleSubmit,
     formState: { errors },
     control,
   } = useForm<IForm>();
 
-  const onSubmit = async ({ username, password }: IForm) => {
+  const onSubmit = async (data: IForm) => {
     try {
-      const { data } = await authAPI.login(username, password);
-      localStorage.setItem('jwtToken', data.access_token);
+      const response = await authAPI.login(data.username, data.password);
+      localStorage.setItem('jwtToken', response.data.access_token);
       router.replace('/');
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('کلمه عبور یا نام کاربری صحیح نیست');
+      setOpen(true);
     }
   };
 
   const onSignUpClick = () => {
     router.push('/signup');
+  };
+
+  const onForgotPasswordClick = () => {
+    router.push('/forget-password');
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
   };
 
   return (
@@ -53,7 +80,10 @@ export default function Index() {
           </div>
           <form
             className="flex flex-col space-y-6"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(onSubmit)(e);
+            }}
           >
             <div>
               <Controller
@@ -80,6 +110,13 @@ export default function Index() {
               {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
               )}
+              <button
+                type="button"
+                onClick={onForgotPasswordClick}
+                className="text-primary hover:underline w-full text-left text-sm"
+              >
+                کلمه عبور خود را فراموش کرده اید؟
+              </button>
             </div>
             <button
               type="submit"
@@ -100,6 +137,11 @@ export default function Index() {
           </form>
         </div>
       </div>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

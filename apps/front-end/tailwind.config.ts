@@ -17,13 +17,18 @@ const config: Config = {
         primary: '#32B7C5',
         primaryLight: '#0EFBEB',
         primaryDark: '#007B88',
+        black: '#000000',
       },
       fontFamily: {
         sans: ['var(--font-yekan)'],
         taha: ['var(--font-taha)'],
       },
+      textColor: {
+        DEFAULT: '#000000',
+      },
     },
   },
   plugins: [],
 };
+
 export default config;

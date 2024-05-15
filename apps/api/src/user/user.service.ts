@@ -98,4 +98,10 @@ export class UserService {
   removeUser(id: number): Promise<{ affected?: number }> {
     return this.userRepository.delete(id);
   }
+
+  async updatePassword(userId: number, newPassword: string): Promise<void> {
+    const user = await this.userRepository.findOneByOrFail({ id: userId });
+    user.password = newPassword;
+    await this.userRepository.save(user);
+  }
 }

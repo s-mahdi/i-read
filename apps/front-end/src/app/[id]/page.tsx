@@ -37,12 +37,12 @@ const QuranPage = ({ params }: any) => {
         >
           بازگشت
         </Button>
-        <Button
+        {/* <Button
           className="text-white border border-white px-2"
           onClick={onBackClick}
         >
           اتمام قرائت
-        </Button>
+        </Button> */}
       </Navbar>
       <Container className="py-8 space-y-8">
         {Array.from(uniqueSuras).map((uniqueSura, i) => (

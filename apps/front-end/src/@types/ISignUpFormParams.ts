@@ -4,4 +4,5 @@ export interface ISignUpFormParams {
   username: string;
   password: string;
   rank: string;
+  nationalCode: number;
 }
