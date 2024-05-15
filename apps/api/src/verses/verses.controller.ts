@@ -6,6 +6,8 @@ import {
   Param,
   Post,
   Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { VersesService } from './verses.service';
 import { UpdateVerseDto } from './dto/update-verse.dto';
@@ -30,6 +32,9 @@ export class VersesController {
 
   @Post('import')
   importVerses() {
+    if (process.env.NODE_ENV !== 'development') {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
     return this.versesService.importVersesFromFiles();
   }
 }

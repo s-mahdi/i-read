@@ -8,6 +8,7 @@ import { UpdateVerseDto } from './dto/update-verse.dto';
 import { join } from 'path';
 import { zipAsync } from '../utils/zipAsync';
 import { quranIndex } from '../assets/quranIndex';
+import axios from 'axios';
 
 @Injectable()
 export class VersesService {
@@ -47,16 +48,29 @@ export class VersesService {
     return Array.from(uniqueSuras);
   }
 
+  async downloadAudio(url, path) {
+    const response = await axios({
+      method: 'get',
+      url,
+      responseType: 'stream',
+      timeout: 600000,
+    });
+
+    response.data.pipe(fs.createWriteStream(path));
+    return new Promise((resolve, reject) => {
+      response.data.on('end', () => resolve(path));
+      response.data.on('error', reject);
+    });
+  }
+
   async importVersesFromFiles(): Promise<{
     success: boolean;
     message: string;
   }> {
     try {
-      // Clear the table before importing new verses
       await this.verseRepository.delete({});
 
-      const basePath =
-        '/Users/mahdi/Work/man-quran-mikhanam/quran/apps/api/src/assets';
+      const basePath = join(__dirname, '../api/assets');
       const originalFilePath = join(basePath, 'ara-quranuthmanienc.txt');
       const translationFilePath = join(basePath, 'fas-abolfazlbahramp.txt');
 
@@ -76,31 +90,64 @@ export class VersesService {
       const translationLines = this.readLines(translationFile);
 
       let i = 0;
+      const audioDir = join(__dirname, '../api/assets/audio');
+      if (!fs.existsSync(audioDir)) {
+        fs.mkdirSync(audioDir, { recursive: true });
+      }
+
+      const promises = [];
+      const verses = [];
+
       for await (const [originalLine, translationLine] of zipAsync(
         originalLines,
         translationLines
       )) {
         const [suraId, order, translation] = translationLine.split('|');
+        const audioFileName = `${this.padWithZeros(
+          suraId,
+          3
+        )}-${this.padWithZeros(order, 3)}.mp3`;
+        const audioUrl = `https://github.com/semarketir/quranjson/raw/master/source/audio/${this.padWithZeros(
+          suraId,
+          3
+        )}/${this.padWithZeros(order, 3)}.mp3`;
+        const localAudioPath = join(audioDir, audioFileName);
+
         const verse = new Verse();
         verse.id = i + 1; // Assuming line number starts at 1
         verse.suraId = parseInt(suraId);
         verse.order = parseInt(order);
         verse.translation = translation;
         verse.text = originalLine.split('|')[2];
-        verse.audioUrl = `https://github.com/semarketir/quranjson/raw/master/source/audio/${this.padWithZeros(
-          suraId,
+
+        const fileName = `${this.padWithZeros(suraId, 3)}-${this.padWithZeros(
+          order,
           3
-        )}/${this.padWithZeros(order, 3)}.mp3`;
+        )}.mp3`;
+        verse.audioUrl = `/audio/${fileName}`;
+
         const id = parseInt(suraId) - 1;
         verse.sura = quranIndex[id].titleAr;
 
+        verses.push(verse);
+
+        if (!fs.existsSync(localAudioPath)) {
+          promises.push(this.downloadAudio(audioUrl, localAudioPath));
+        }
+
+        i++;
+      }
+
+      // Wait for all downloads to complete
+      await Promise.all(promises);
+
+      // Save all verses after the files are downloaded
+      for (const verse of verses) {
         try {
           await this.verseRepository.save(verse);
         } catch (error) {
           console.error('Error saving verse:', error);
         }
-
-        i++;
       }
 
       return { success: true, message: 'Verses imported successfully.' };
