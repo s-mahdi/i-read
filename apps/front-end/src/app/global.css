@@ -45,6 +45,10 @@ h2 {
   font-weight: bold;
 }
 
+* {
+  color: black;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
