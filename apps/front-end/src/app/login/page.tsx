@@ -31,14 +31,14 @@ export default function Index() {
     control,
   } = useForm<IForm>();
 
-  const onSubmit = async (data: IForm) => {
+  const onSubmit = async ({ username, password }: IForm) => {
     try {
-      const response = await authAPI.login(data.username, data.password);
-      localStorage.setItem('jwtToken', response.data.access_token);
+      const { data } = await authAPI.login(username, password);
+      localStorage.setItem('jwtToken', data.access_token);
       router.replace('/');
-    } catch (error) {
-      console.error(error);
-      setErrorMessage('کلمه عبور یا نام کاربری صحیح نیست');
+    } catch (e: any) {
+      console.error(e);
+      setErrorMessage(e?.response?.data?.message);
       setOpen(true);
     }
   };
@@ -80,10 +80,7 @@ export default function Index() {
           </div>
           <form
             className="flex flex-col space-y-6"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit(onSubmit)(e);
-            }}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div>
               <Controller

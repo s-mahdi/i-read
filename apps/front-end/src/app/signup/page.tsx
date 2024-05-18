@@ -4,12 +4,16 @@ import { ISignUpFormParams } from '@/@types/ISignUpFormParams';
 import { Input } from '@/components';
 import MemoLogo from '@/components/Logo';
 import { useSignUpAPI } from '@/state/useSignUpAPI';
+import { Alert, Snackbar } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 export default function SignUpPage() {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const {
     handleSubmit,
     formState: { errors },
@@ -23,13 +27,25 @@ export default function SignUpPage() {
       const { data } = await mutateAsync(variables);
       localStorage.setItem('jwtToken', data.access_token);
       router.replace('/');
-    } catch (e) {
+    } catch (e: any) {
+      setErrorMessage(e?.response?.data?.message);
+      setOpen(true);
       console.error(e);
     }
   };
 
   const onLoginClick = () => {
     router.push('/login');
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
   };
 
   return (
@@ -150,6 +166,11 @@ export default function SignUpPage() {
           </form>
         </div>
       </div>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
