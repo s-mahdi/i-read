@@ -18,7 +18,7 @@ export class AuthService {
   async login(username: string, pass: string): Promise<any> {
     const user = await this.userService.findOneByUserName(username);
     if (user?.password !== pass) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('نام کاربری یا کلمه عبور صحیح نیست');
     }
     const payload = { username: user.username, sub: user.id, role: user.role };
     return {

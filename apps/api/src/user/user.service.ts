@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,7 +25,15 @@ export class UserService {
    * @returns promise of user
    */
   async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const existingUser = await this.userRepository.findOne({
+      where: { username: createUserDto.username },
+    });
+    if (existingUser) {
+      throw new ConflictException('نام کاربری در حال حاضر ثبت نام شده');
+    }
+
     const user: User = new User();
+
     user.name = createUserDto.name;
     user.lastName = createUserDto.lastName;
     user.username = createUserDto.username;
