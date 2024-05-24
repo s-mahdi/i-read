@@ -8,7 +8,7 @@ export interface IUser {
   role: ERole;
   rank: string;
   readVerses: Array<any>;
-  schedule: Array<{
+  schedules: Array<{
     date: string;
     isRead: boolean;
     suraList: string[];

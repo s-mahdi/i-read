@@ -5,11 +5,15 @@ import { Input } from '@/components';
 import MemoLogo from '@/components/Logo';
 import { authAPI } from '@/httpClient/authAPI';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import { Alert, Snackbar } from '@mui/material';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 export default function Index() {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const {
     handleSubmit,
     formState: { errors },
@@ -28,13 +32,25 @@ export default function Index() {
         newPassword,
       });
       router.replace('/login');
-    } catch (e) {
+    } catch (e: any) {
+      setErrorMessage(e?.response?.data?.message);
+      setOpen(true);
       console.error(e);
     }
   };
 
   const onLoginClick = () => {
     router.push('/login');
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
   };
 
   return (
@@ -115,6 +131,11 @@ export default function Index() {
           </form>
         </div>
       </div>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
