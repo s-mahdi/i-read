@@ -10,7 +10,7 @@ export class ForgetPasswordDto {
   @IsNotEmpty({ message: 'وارد کردن کد ملی الزامی است.' })
   @IsNumber({}, { message: 'کد ملی باید به صورت عدد باشد.' })
   @IsValidNationalCode({ message: 'کد ملی نامعتبر است.' })
-  nationalCode: number;
+  nationalCode: string;
 
   @IsString({ message: 'رمز عبور باید به صورت رشته باشد.' })
   @IsNotEmpty({ message: 'وارد کردن رمز عبور الزامی است.' })

@@ -4,7 +4,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from '../config/jwt.config';
 import { User } from '../user/entities/user.entity';
 import { AuthModule } from '../auth/auth.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
@@ -16,6 +15,7 @@ import { ProxyController } from '../proxy/proxy.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
+import { Schedule } from '../schedules/entities/schedule.entity';
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { join } from 'path';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Verse],
+      entities: [User, Verse, Schedule],
       synchronize: true,
       logging: true,
     }),
@@ -38,7 +38,10 @@ import { join } from 'path';
     AuthModule,
     VersesModule,
     HttpModule,
-    JwtModule.register(jwtConstants),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '24h' },
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'api', 'assets', 'audio'),
       serveRoot: '/api/audio',

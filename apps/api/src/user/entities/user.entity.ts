@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Schedule } from '../../schedules/entities/schedule.entity';
 
 @Entity()
 export class User {
@@ -25,10 +27,10 @@ export class User {
   lastName: string;
 
   @Column({ nullable: true })
-  rank: string;
+  rank?: string;
 
   @Column({ nullable: true })
-  nationalCode: number;
+  nationalCode?: string;
 
   @Column({
     type: 'enum',
@@ -40,11 +42,6 @@ export class User {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ type: 'jsonb', default: [] })
-  schedule: {
-    date: string;
-    isRead: boolean;
-    suraList: string[];
-    startVerseId: number;
-  }[];
+  @OneToMany(() => Schedule, (schedule) => schedule.user, { cascade: true })
+  schedules: Schedule[];
 }

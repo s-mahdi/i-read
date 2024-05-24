@@ -3,8 +3,6 @@ import {
   IsNotEmpty,
   IsEnum,
   Matches,
-  IsArray,
-  ArrayUnique,
   IsNumber,
 } from 'class-validator';
 import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
@@ -35,9 +33,8 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty({ message: 'وارد کردن کد ملی الزامی است.' })
-  @IsNumber({}, { message: 'کد ملی باید به صورت عدد باشد.' })
   @IsValidNationalCode({ message: 'کد ملی نامعتبر است.' })
-  nationalCode: number;
+  nationalCode: string;
 
   @IsString({ message: 'درجه باید به صورت رشته متنی باشد.' })
   rank: string;
