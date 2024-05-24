@@ -23,6 +23,7 @@ export class AuthController {
   }
 
   @Post('forget-password')
+  @Public()
   forgetPassword(@Body() forgetPasswordDto: ForgetPasswordDto) {
     return this.authService.resetPassword(forgetPasswordDto);
   }

@@ -8,8 +8,31 @@ import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
 import { AppModule } from './app/app.module';
+import { join } from 'path';
 
-dotenv.config();
+dotenv.config({ path: join(__dirname, '.env') });
+
+const requiredVariables = [
+  'DB_NAME',
+  'DB_HOST',
+  'DB_USERNAME',
+  'DB_PASSWORD',
+  'DB_PORT',
+  'JWT_SECRET',
+];
+
+const missingVariables = requiredVariables.filter(
+  (variable) => !(variable in process.env)
+);
+
+if (missingVariables.length > 0) {
+  console.error(
+    `Error: Required environment variables are missing: ${missingVariables.join(
+      ', '
+    )}`
+  );
+  process.exit(1);
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

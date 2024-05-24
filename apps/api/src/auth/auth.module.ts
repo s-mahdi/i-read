@@ -5,13 +5,22 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UserModule } from '../user/user.module'; // Import UserModule
 import { AuthController } from './auth.controller';
-import { jwtConstants } from '../config/jwt.config';
+import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: join(__dirname, '.env'),
+      isGlobal: true,
+    }),
     UserModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({ ...jwtConstants, global: true }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '24h' },
+      global: true,
+    }),
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],

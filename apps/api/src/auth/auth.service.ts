@@ -41,10 +41,14 @@ export class AuthService {
   }: ForgetPasswordDto): Promise<void> {
     const user = await this.userService.findOneByUserName(username);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(
+        'اطلاعات وارد شده صحیح نیست یا کاربری با مشخصات وارد شده وجود ندارد'
+      );
     }
     if (user.nationalCode !== nationalCode) {
-      throw new UnauthorizedException('Invalid national code');
+      throw new UnauthorizedException(
+        'اطلاعات وارد شده صحیح نیست یا کاربری با مشخصات وارد شده وجود ندارد'
+      );
     }
     await this.userService.updatePassword(user.id, newPassword);
   }
