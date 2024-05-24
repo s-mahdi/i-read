@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Body,
-  Patch,
-  Param,
-  Post,
-  Query,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Query } from '@nestjs/common';
 import { VersesService } from './verses.service';
 import { UpdateVerseDto } from './dto/update-verse.dto';
 
@@ -28,13 +18,5 @@ export class VersesController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateVerseDto: UpdateVerseDto) {
     return this.versesService.update(+id, updateVerseDto);
-  }
-
-  @Post('import')
-  importVerses() {
-    if (process.env.NODE_ENV !== 'development') {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-    return this.versesService.importVersesFromFiles();
   }
 }

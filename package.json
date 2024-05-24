@@ -56,10 +56,11 @@
     "stop:api": "pm2 delete api",
     "stop:frontend": "pm2 delete frontend",
     "stop:all": "pm2 delete all",
-    "restart:all": "npm run stop:all && npm run build-and-copy && npm run start:all"
+    "restart:all": "npm run stop:all && npm run build-and-copy && npm run start:all",
+    "quran-db:seed": "ts-node -r ./apps/api/tsconfig.json ./apps/api/src/quranDBSeed.ts"
   },
   "devDependencies": {
-    "@nestjs/schematics": "^10.0.1",
+    "@nestjs/schematics": "^10.1.1",
     "@nestjs/testing": "^10.0.2",
     "@nrwl/nest": "^18.3.4",
     "@nrwl/next": "^18.3.4",
@@ -104,7 +105,7 @@
     "shx": "^0.3.4",
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.1.0",
-    "ts-node": "10.9.1",
+    "ts-node": "^10.9.2",
     "typescript": "~5.4.2",
     "webpack-cli": "^5.1.4"
   }
