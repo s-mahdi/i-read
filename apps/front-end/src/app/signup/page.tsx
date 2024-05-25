@@ -4,7 +4,7 @@ import { ISignUpFormParams } from '@/@types/ISignUpFormParams';
 import { Input } from '@/components';
 import MemoLogo from '@/components/Logo';
 import { useSignUpAPI } from '@/state/useSignUpAPI';
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, Button, CircularProgress, Snackbar } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -20,7 +20,7 @@ export default function SignUpPage() {
     control,
   } = useForm<ISignUpFormParams>();
 
-  const { mutateAsync } = useSignUpAPI();
+  const { mutateAsync, isPending } = useSignUpAPI();
 
   const onSubmit = async (variables: ISignUpFormParams) => {
     try {
@@ -146,22 +146,28 @@ export default function SignUpPage() {
               )}
             </div>
 
-            <button
+            <Button
               type="submit"
               className="bg-primary w-full h-12 rounded-lg text-white"
+              disabled={isPending}
             >
-              ثبت نام
-            </button>
+              {isPending ? (
+                <CircularProgress sx={{ color: 'white' }} />
+              ) : (
+                'ثبت نام'
+              )}
+            </Button>
 
             <p className="text-center font-light">
               عضو هستید؟{' '}
-              <button
+              <Button
+                disabled={isPending}
                 type="button"
                 onClick={onLoginClick}
                 className="text-primary hover:underline hover"
               >
                 وارد شوید
-              </button>
+              </Button>
             </p>
           </form>
         </div>
