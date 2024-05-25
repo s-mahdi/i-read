@@ -15,6 +15,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { Schedule } from '../schedules/entities/schedule.entity';
+import { SchedulesModule } from '../schedules/schedules.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { Schedule } from '../schedules/entities/schedule.entity';
     UserModule,
     AuthModule,
     VersesModule,
+    SchedulesModule,
     HttpModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

@@ -42,4 +42,9 @@ export class SchedulesService {
   async remove(id: number): Promise<void> {
     await this.scheduleRepository.delete(id);
   }
+
+  async finishSchedule(id: number): Promise<Schedule> {
+    await this.scheduleRepository.update(id, { isRead: true });
+    return this.findOne(id);
+  }
 }

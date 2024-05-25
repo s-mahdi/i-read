@@ -42,4 +42,16 @@ export class VersesService {
     const uniqueSuras = new Set(verses.map((verse) => verse.sura));
     return Array.from(uniqueSuras);
   }
+
+  async findVersesByStartId(
+    startVerseId: number,
+    pageSize: number
+  ): Promise<Verse[]> {
+    return this.verseRepository
+      .createQueryBuilder('verse')
+      .where('verse.id >= :startVerseId', { startVerseId })
+      .orderBy('verse.id', 'ASC')
+      .take(pageSize)
+      .getMany();
+  }
 }

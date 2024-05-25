@@ -91,6 +91,11 @@ export class UserService {
     return this.userRepository.findOneOrFail({
       where: { id },
       relations: ['schedules'],
+      order: {
+        schedules: {
+          date: 'ASC',
+        },
+      },
     });
   }
 
