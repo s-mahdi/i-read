@@ -1,14 +1,5 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsEnum,
-  Matches,
-  IsNumber,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum } from 'class-validator';
 import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
-
-const passwordRegEx =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
 export class CreateUserDto {
   @IsString({ message: 'نام باید به صورت رشته باشد.' })
@@ -21,15 +12,10 @@ export class CreateUserDto {
 
   @IsString({ message: 'نام کاربری باید به صورت متن باشد.' })
   @IsNotEmpty({ message: 'وارد کردن نام کاربری الزامی است.' })
-  @Matches(/^\d+$/, { message: 'نام کاربری باید یک رشته عددی باشد.' })
   username: string;
 
   @IsString({ message: 'رمز عبور باید به صورت رشته باشد.' })
   @IsNotEmpty({ message: 'وارد کردن رمز عبور الزامی است.' })
-  // @Matches(passwordRegEx, {
-  //   message:
-  //     'رمز عبور باید بین ۸ تا ۲۰ کاراکتر باشد و شامل حداقل یک حرف بزرگ، یک حرف کوچک، یک عدد و یک نویسه خاص باشد.',
-  // })
   password: string;
 
   @IsNotEmpty({ message: 'وارد کردن کد ملی الزامی است.' })
