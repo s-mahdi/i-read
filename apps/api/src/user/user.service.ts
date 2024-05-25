@@ -8,6 +8,7 @@ import { getNextNonHolidayDates } from '../utils/calendarUtils';
 import { VersesService } from '../verses/verses.service';
 import { SchedulesService } from '../schedules/schedules.service';
 import { CreateScheduleDto } from '../schedules/dto/create-schedule.dto';
+import { Schedule } from '../schedules/entities/schedule.entity';
 
 @Injectable()
 export class UserService {
@@ -32,41 +33,38 @@ export class UserService {
       throw new ConflictException('نام کاربری در حال حاضر ثبت نام شده');
     }
 
-    const user = new User();
-    user.name = createUserDto.name;
-    user.lastName = createUserDto.lastName;
-    user.username = createUserDto.username;
-    user.password = createUserDto.password;
-    user.rank = createUserDto.rank;
-    user.nationalCode = createUserDto.nationalCode;
+    const user = this.userRepository.create({
+      ...createUserDto,
+      schedules: [],
+    });
 
     const startDate = new Date();
     const nonHolidayDates = await getNextNonHolidayDates(startDate, 125);
 
     return this.dataSource.transaction(async (manager) => {
-      const savedUser = await manager.save(User, user);
+      const savedUser = await manager.save(user);
 
-      const schedules = await Promise.all(
-        nonHolidayDates.map(async (date, index) => {
-          const startVerseId = 1 + 50 * index;
-          const suraList = await this.versesService.getSuraListFromStartVerseId(
-            startVerseId,
-            50
-          );
-          const createScheduleDto: CreateScheduleDto = {
-            date: date.toISOString(),
-            isRead: false,
-            startVerseId,
-            suraList,
-            user: savedUser,
-          };
-          return this.schedulesService.create(createScheduleDto, manager);
-        })
-      );
+      const schedulePromises = nonHolidayDates.map(async (date, index) => {
+        const startVerseId = 1 + 50 * index;
+        const suraList = await this.versesService.getSuraListFromStartVerseId(
+          startVerseId,
+          50
+        );
+        const createScheduleDto: CreateScheduleDto = {
+          date: date.toISOString(),
+          isRead: false,
+          startVerseId,
+          suraList,
+          user: savedUser,
+        };
+        return this.schedulesService.create(createScheduleDto, manager);
+      });
+
+      const schedules = await Promise.all(schedulePromises);
+
+      await manager.save(Schedule, schedules);
 
       savedUser.schedules = schedules;
-      await manager.save(User, savedUser);
-
       return manager.findOne(User, {
         where: { username: createUserDto.username },
         relations: ['schedules'],
