@@ -37,13 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ReactQueryProvider>
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <ThemeProvider theme={theme}>
-            <body className={`${yekan.variable} ${taha.variable} font-sans`}>
-              {children}
-            </body>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <body className={`${yekan.variable} ${taha.variable} font-sans`}>
+          <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </AppRouterCacheProvider>
+        </body>
       </ReactQueryProvider>
     </html>
   );
