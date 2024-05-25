@@ -33,6 +33,13 @@ export class UserService {
       throw new ConflictException('نام کاربری در حال حاضر ثبت نام شده');
     }
 
+    const existingUserByNationalCode = await this.userRepository.findOne({
+      where: { nationalCode: createUserDto.nationalCode },
+    });
+    if (existingUserByNationalCode) {
+      throw new ConflictException('کد ملی در حال حاضر ثبت نام شده');
+    }
+
     const user = this.userRepository.create({
       ...createUserDto,
       schedules: [],
