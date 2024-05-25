@@ -80,9 +80,19 @@ export const ReadingBox = ({ sura, verses }: IProps) => {
                 </span>
                 <VerseIcon fontSize={40} />
               </div>
-              <Typography className="text-4xl font-taha">{text}</Typography>
+              <Typography
+                className={`text-4xl font-taha ${
+                  index === playingIndex ? 'text-primary' : 'text-gray-900'
+                }`}
+              >
+                {text}
+              </Typography>
             </div>
-            <p>{`${toIndiaDigits(order)}. ${translation}`}</p>
+            <p
+              className={`${
+                index === playingIndex ? 'text-primary' : 'text-gray-900'
+              }`}
+            >{`${toIndiaDigits(order)}. ${translation}`}</p>
             <div className="flex flex-row-reverse">
               <Tooltip title="پخش" enterDelay={500} leaveDelay={200}>
                 <IconButton onClick={() => handlePlay(index)}>
