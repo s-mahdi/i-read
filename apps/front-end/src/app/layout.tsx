@@ -4,6 +4,7 @@ import './global.css';
 import ReactQueryProvider from '@/state/ReactQueryProvider';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 
 const yekan = localFont({
@@ -39,7 +40,10 @@ export default function RootLayout({
       <ReactQueryProvider>
         <body className={`${yekan.variable} ${taha.variable} font-sans`}>
           <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              {children}
+            </ThemeProvider>
           </AppRouterCacheProvider>
         </body>
       </ReactQueryProvider>
