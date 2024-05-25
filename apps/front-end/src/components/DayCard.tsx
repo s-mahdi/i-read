@@ -1,14 +1,16 @@
 import { Card } from '@mui/material';
 import React from 'react';
 import VerseIcon from './VerseIcon';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 interface IProps {
   date: Date;
   suraList: string;
+  isRead: boolean;
   onClick: () => void;
 }
 
-export const DayCard = ({ date, suraList, onClick }: IProps) => {
+export const DayCard = ({ date, suraList, isRead, onClick }: IProps) => {
   return (
     <Card
       elevation={4}
@@ -30,6 +32,7 @@ export const DayCard = ({ date, suraList, onClick }: IProps) => {
               month: 'short',
             }).format(date)}
           </p>
+          {isRead && <VerifiedIcon color="primary" />}
         </div>
 
         <p>{suraList}</p>

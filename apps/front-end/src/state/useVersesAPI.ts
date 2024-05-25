@@ -11,12 +11,12 @@ type Options = Omit<
   'queryKey' | 'queryFn'
 >;
 
-export const useVersesAPI = (page = 1, options?: Options) =>
+export const useVersesAPI = (scheduleId: number, options?: Options) =>
   useQuery<TData, TError>({
     queryKey: [GET_VERSES_QUERY_KEY],
     queryFn: async () => {
       try {
-        const res = await quranAPI.getVerses(page);
+        const res = await quranAPI.getVersesByScheduleId(scheduleId);
         if (res.status === 200) {
           return res.data;
         }

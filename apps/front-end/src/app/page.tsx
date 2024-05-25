@@ -13,7 +13,7 @@ function HomePage() {
   const { data: res, isLoading, error } = useProfileAPI();
   const router = useRouter();
 
-  const onCardClick = (verseId: number) => router.push(`/${verseId}`);
+  const onCardClick = (scheduleId: number) => router.push(`/${scheduleId}`);
 
   useEffect(() => {
     const jwtToken = localStorage.getItem('jwtToken');
@@ -34,12 +34,13 @@ function HomePage() {
       <Navbar user={data} />
       <Container className="py-8">
         <Grid container spacing={3}>
-          {data.schedules.map(({ date, suraList }, index) => (
+          {data.schedules.map(({ date, suraList, isRead, id }, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <DayCard
+                isRead={isRead}
                 date={new Date(date)}
                 suraList={suraList.join(', ')}
-                onClick={() => onCardClick(index + 1)}
+                onClick={() => onCardClick(id)}
               />
             </Grid>
           ))}

@@ -9,6 +9,7 @@ export interface IUser {
   rank: string;
   readVerses: Array<any>;
   schedules: Array<{
+    id: number;
     date: string;
     isRead: boolean;
     suraList: string[];

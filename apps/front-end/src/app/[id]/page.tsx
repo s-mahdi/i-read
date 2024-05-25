@@ -5,13 +5,14 @@ import { Navbar } from '@/components/Navbar';
 import { ReadingBox } from '@/components/ReadingBox';
 import { LoaderLayout } from '@/layouts/LoaderLayout';
 import { useProfileAPI } from '@/state/useProfile';
+import { useFinishScheduleAPI } from '@/state/useFinishScheduleAPI';
 import { useVersesAPI } from '@/state/useVersesAPI';
 import { Button, Container } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
-// TODO: we need to take schedule id, not startVerseId!
 const QuranPage = ({ params }: any) => {
   const { data: profileData, isLoading } = useProfileAPI();
+  const { mutateAsync: finishSchedule } = useFinishScheduleAPI();
   const { data } = useVersesAPI(params.id);
   const router = useRouter();
 
@@ -25,6 +26,15 @@ const QuranPage = ({ params }: any) => {
     router.push('/');
   };
 
+  const onFinishClick = async () => {
+    try {
+      await finishSchedule(Number(params.id));
+      router.push('/');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div className="bg-primary bg-fixed bg-[url('/login-bg.png')] bg-cover">
       <Navbar user={profileData.data}>
@@ -36,7 +46,7 @@ const QuranPage = ({ params }: any) => {
         </Button>
         <Button
           className="text-white border border-white px-2"
-          onClick={onBackClick}
+          onClick={onFinishClick}
         >
           اتمام قرائت
         </Button>

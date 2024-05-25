@@ -67,7 +67,7 @@ export const Navbar: React.FC<IProps> = ({ user, children }) => {
               <Avatar
                 sx={{ bgcolor: 'primary.main', mr: 1, cursor: 'pointer' }}
               >
-                <PersonIcon />
+                <PersonIcon sx={{ fill: 'white' }} />
               </Avatar>
               <KeyboardArrowDownIcon sx={{ fill: 'white' }} />
               <p className="text-white">{`${user.name} ${user.lastName}`}</p>
