@@ -11,7 +11,6 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { VersesModule } from '../verses/verses.module';
 import { Verse } from '../verses/entities/verse.entity';
 import { HttpModule } from '@nestjs/axios';
-import { ProxyController } from '../proxy/proxy.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
@@ -47,7 +46,7 @@ import { Schedule } from '../schedules/entities/schedule.entity';
       serveRoot: '/api/audio',
     }),
   ],
-  controllers: [AppController, ProxyController],
+  controllers: [AppController],
   providers: [
     AppService,
     {
