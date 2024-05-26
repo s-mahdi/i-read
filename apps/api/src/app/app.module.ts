@@ -20,7 +20,7 @@ import { SchedulesModule } from '../schedules/schedules.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: join(__dirname, '.env'),
+      envFilePath: join(__dirname, '../../', '.env'),
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
