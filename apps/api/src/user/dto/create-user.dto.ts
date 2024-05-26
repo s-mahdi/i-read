@@ -34,7 +34,4 @@ export class CreateUserDto {
 
   @IsString({ message: 'درجه باید به صورت رشته متنی باشد.' })
   rank: string;
-
-  @IsEnum(['admin', 'user', 'employee'], { message: 'نقش وارد شده صحیح نیست' })
-  role: string;
 }
