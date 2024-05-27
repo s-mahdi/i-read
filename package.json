@@ -51,7 +51,7 @@
     "copy-env:api": "shx cp apps/api/.env dist/apps/api/",
     "copy-env:frontend": "shx cp apps/front-end/.env dist/apps/front-end/",
     "build-and-copy": "npm run build:api && npm run copy-env:api && npm run build:frontend && npm run copy-env:frontend",
-    "serve:api": "node start dist/apps/api/main.js",
+    "serve:api": "node dist/apps/api/main.js",
     "serve:frontend": "nx serve front-end --configuration=production",
     "serve:all": "npm run serve:api && npm run serve:frontend",
     "local:serve:api": "pm2 start dist/apps/api/main.js --name api",
