@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { Schedule } from '../schedules/entities/schedule.entity';
 import { SchedulesModule } from '../schedules/schedules.module';
+import { isDev } from '../utils/isDev';
 
 @Module({
   imports: [
@@ -33,6 +34,12 @@ import { SchedulesModule } from '../schedules/schedules.module';
       entities: [User, Verse, Schedule],
       synchronize: true,
       logging: true,
+      extra: {
+        ssl: {
+          // don't reject if we are in development
+          rejectUnauthorized: !isDev,
+        },
+      },
     }),
     UserModule,
     AuthModule,

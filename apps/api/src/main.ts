@@ -1,8 +1,3 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
@@ -19,6 +14,8 @@ const requiredVariables = [
   'DB_PASSWORD',
   'DB_PORT',
   'JWT_SECRET',
+  'HOST_ADDRESS',
+  'PORT',
 ];
 
 const missingVariables = requiredVariables.filter(
@@ -35,10 +32,10 @@ if (missingVariables.length > 0) {
 }
 
 async function bootstrap() {
+  console.log('process.env.HOST_ADDRESS: ', process.env.HOST_ADDRESS);
   const app = await NestFactory.create(AppModule);
-  // TODO use env variable and remove 4200 in production
   app.enableCors({
-    origin: ['http://localhost:4200', process.env.HOST_ADDRESS],
+    origin: [process.env.HOST_ADDRESS],
   });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
