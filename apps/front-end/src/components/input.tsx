@@ -23,9 +23,10 @@ export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({
     let filteredValue = '';
 
     for (let i = 0; i < value.length; i++) {
-      if (persianNumbers.includes(value[i])) {
-        filteredValue += persianToEnglishMap[value[i]];
-      } else if (englishNumbers.includes(value[i])) {
+      const val = value[i] as string;
+      if (persianNumbers.includes(val)) {
+        filteredValue += persianToEnglishMap[val];
+      } else if (englishNumbers.includes(val)) {
         filteredValue += value[i];
       }
     }

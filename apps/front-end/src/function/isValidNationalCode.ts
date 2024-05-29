@@ -1,6 +1,6 @@
 export function isValidNationalCode(input: string) {
   if (!/^\d{10}$/.test(input)) return false;
-  const check = +input[9];
+  const check = +input[9]!;
   const sum =
     input
       .split('')

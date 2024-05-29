@@ -16,7 +16,6 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { Schedule } from '../schedules/entities/schedule.entity';
 import { SchedulesModule } from '../schedules/schedules.module';
-import { isDev } from '../utils/isDev';
 
 @Module({
   imports: [
@@ -37,7 +36,7 @@ import { isDev } from '../utils/isDev';
       extra: {
         ssl: {
           // don't reject if we are in development
-          rejectUnauthorized: !isDev,
+          rejectUnauthorized: process.env.REJECT_UNAUTHORIZED,
         },
       },
     }),

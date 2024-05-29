@@ -24,7 +24,7 @@ export const ReadingBox = ({ sura, verses }: IProps) => {
 
   useEffect(() => {
     if (playingIndex !== null) {
-      audioRefs.current[playingIndex].play();
+      audioRefs.current[playingIndex]?.play();
       verseRefs.current[playingIndex]?.scrollIntoView({
         behavior: 'smooth',
         block: 'center',

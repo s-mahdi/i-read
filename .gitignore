@@ -38,9 +38,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-.nx/cache
-
 **/.next
 **/.vscode
 
 .env
+
+apps/api/src/assets/audio/
