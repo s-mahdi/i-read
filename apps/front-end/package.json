@@ -3,9 +3,9 @@
   "version": "3.50.1",
   "author": "Mahdi Hoseini",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 4200",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 4200",
     "clean": "rimraf .next .swc out coverage",
     "lint": "next lint",
     "format": "next lint --fix && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore"
