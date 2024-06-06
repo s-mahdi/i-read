@@ -16,7 +16,7 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly versesService: VersesService,
     private readonly dataSource: DataSource,
-    private readonly schedulesService: SchedulesService
+    private readonly schedulesService: SchedulesService,
   ) {}
 
   /**
@@ -55,7 +55,7 @@ export class UserService {
         const startVerseId = 1 + 50 * index;
         const suraList = await this.versesService.getSuraListFromStartVerseId(
           startVerseId,
-          50
+          50,
         );
         const createScheduleDto: CreateScheduleDto = {
           date: date.toISOString(),

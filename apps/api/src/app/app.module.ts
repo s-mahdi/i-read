@@ -33,12 +33,6 @@ import { SchedulesModule } from '../schedules/schedules.module';
       entities: [User, Verse, Schedule],
       synchronize: true,
       logging: true,
-      extra: {
-        ssl: {
-          // don't reject if we are in development
-          rejectUnauthorized: process.env.REJECT_UNAUTHORIZED,
-        },
-      },
     }),
     UserModule,
     AuthModule,

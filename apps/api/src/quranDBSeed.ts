@@ -21,14 +21,14 @@ const requiredVariables = [
 ];
 
 const missingVariables = requiredVariables.filter(
-  (variable) => !(variable in process.env)
+  (variable) => !(variable in process.env),
 );
 
 if (missingVariables.length > 0) {
   console.error(
     `Error: Required environment variables are missing: ${missingVariables.join(
-      ', '
-    )}`
+      ', ',
+    )}`,
   );
   process.exit(1);
 }
@@ -72,16 +72,16 @@ async function seedQuranDatabase() {
     // Use zipAsync to iterate over lines in parallel
     for await (const [originalLine, translationLine] of zipAsync(
       originalLines,
-      translationLines
+      translationLines,
     )) {
       const [suraId, order, translation] = translationLine.split('|');
       const audioFileName = `${padWithZeros(suraId, 3)}-${padWithZeros(
         order,
-        3
+        3,
       )}.mp3`;
       const audioUrl = `https://github.com/semarketir/quranjson/raw/master/source/audio/${padWithZeros(
         suraId,
-        3
+        3,
       )}/${padWithZeros(order, 3)}.mp3`;
       const localAudioPath = join(audioDir, audioFileName);
 
@@ -94,7 +94,7 @@ async function seedQuranDatabase() {
 
       const fileName = `${padWithZeros(suraId, 3)}-${padWithZeros(
         order,
-        3
+        3,
       )}.mp3`;
       verse.audioUrl = `/audio/${fileName}`;
 
