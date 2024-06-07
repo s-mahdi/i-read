@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Typography, Tooltip, IconButton } from '@mui/material';
 import PlayIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -15,10 +15,18 @@ interface IVerse {
 interface IProps {
   sura: string;
   verses: IVerse[];
+  playingIndex: number | null;
+  handlePlay: (index: number) => void;
+  handleAudioEnded: (index: number) => void;
 }
 
-export const ReadingBox = ({ sura, verses }: IProps) => {
-  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+export const ReadingBox = ({
+  sura,
+  verses,
+  playingIndex,
+  handlePlay,
+  handleAudioEnded,
+}: IProps) => {
   const audioRefs = useRef<HTMLAudioElement[]>([]);
   const verseRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -39,15 +47,6 @@ export const ReadingBox = ({ sura, verses }: IProps) => {
       }
     });
   }, [playingIndex]);
-
-  const handlePlay = (index: number) => {
-    setPlayingIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
-
-  const handleAudioEnded = (index: number) => {
-    const nextIndex = index + 1 < verses.length ? index + 1 : null;
-    setPlayingIndex(nextIndex);
-  };
 
   return (
     <div className="shadow-xl rounded-2xl overflow-hidden ">
