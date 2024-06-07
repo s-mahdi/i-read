@@ -44,7 +44,7 @@ import { SchedulesModule } from '../schedules/schedules.module';
       signOptions: { expiresIn: '24h' },
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'api', 'assets', 'audio'),
+      rootPath: join(__dirname, '..', 'assets', 'audio'),
       serveRoot: '/api/audio',
     }),
   ],
