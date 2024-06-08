@@ -73,7 +73,7 @@ export const ReadingBox = ({
               ref={(el) => {
                 audioRefs.current[index] = el!;
               }}
-              src={`${process.env.NEXT_PUBLIC_API_URL}${audioUrl}`}
+              src={audioUrl}
               crossOrigin="anonymous"
               onEnded={() => handleAudioEnded(index)}
             />
