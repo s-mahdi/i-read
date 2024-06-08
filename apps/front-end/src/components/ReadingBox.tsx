@@ -39,6 +39,7 @@ export const ReadingBox = ({
       });
     }
     audioRefs.current.forEach((audio, index) => {
+      if (!audio) return;
       if (index === playingIndex) {
         audio.play();
       } else {
@@ -58,7 +59,9 @@ export const ReadingBox = ({
       <div className="flex flex-col bg-white bg-opacity-85 gap-y-8 p-8">
         {verses.map(({ text, translation, order, audioUrl }, index) => (
           <div
-            ref={(el) => (verseRefs.current[index] = el)}
+            ref={(el) => {
+              verseRefs.current[index] = el;
+            }}
             className={`flex flex-col gap-y-4 transition-all duration-500 ${
               index === playingIndex
                 ? 'bg-primary-100 text-primary'
@@ -67,7 +70,9 @@ export const ReadingBox = ({
             key={index}
           >
             <audio
-              ref={(el) => (audioRefs.current[index] = el!)}
+              ref={(el) => {
+                audioRefs.current[index] = el!;
+              }}
               src={`${process.env.NEXT_PUBLIC_API_URL}${audioUrl}`}
               crossOrigin="anonymous"
               onEnded={() => handleAudioEnded(index)}
