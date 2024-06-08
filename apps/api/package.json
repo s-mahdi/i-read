@@ -12,7 +12,8 @@
     "start:debug": "nest start --debug --watch",
     "start": "node dist/src/main",
     "seed:verses": "ts-node -r ./tsconfig.json ./src/quranDBSeed.ts",
-    "seed:verses:liara": "ts-node -r ./tsconfig.json ./src/liaraDBSeed.ts"
+    "seed:verses:liara": "ts-node -r ./tsconfig.json ./src/liaraDBSeed.ts",
+    "seed:audio:liara": "ts-node -r ./tsconfig.json ./src/checkAndUploadAudioFiles.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.592.0",
@@ -53,6 +54,7 @@
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "axios-retry": "^4.4.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
