@@ -18,6 +18,7 @@ const requiredVariables = [
   'DB_USERNAME',
   'DB_PASSWORD',
   'DB_PORT',
+  'STATIC_FILES_BASE_URL',
 ];
 
 const missingVariables = requiredVariables.filter(
@@ -69,7 +70,6 @@ async function seedQuranDatabase() {
     const promises = [];
     const verses = [];
 
-    // Use zipAsync to iterate over lines in parallel
     for await (const [originalLine, translationLine] of zipAsync(
       originalLines,
       translationLines,
@@ -79,24 +79,16 @@ async function seedQuranDatabase() {
         order,
         3,
       )}.mp3`;
-      const audioUrl = `https://github.com/semarketir/quranjson/raw/master/source/audio/${padWithZeros(
-        suraId,
-        3,
-      )}/${padWithZeros(order, 3)}.mp3`;
+      const audioUrl = `${process.env.STATIC_FILES_BASE_URL}${audioFileName}`;
       const localAudioPath = join(audioDir, audioFileName);
 
       const verse = new Verse();
-      verse.id = i + 1; // Assuming line number starts at 1
+      verse.id = i + 1;
       verse.suraId = parseInt(suraId);
       verse.order = parseInt(order);
       verse.translation = translation;
       verse.text = originalLine.split('|')[2];
-
-      const fileName = `${padWithZeros(suraId, 3)}-${padWithZeros(
-        order,
-        3,
-      )}.mp3`;
-      verse.audioUrl = `/audio/${fileName}`;
+      verse.audioUrl = audioUrl;
 
       const id = parseInt(suraId) - 1;
       verse.sura = quranIndex[id].titleAr;
@@ -110,10 +102,7 @@ async function seedQuranDatabase() {
       i++;
     }
 
-    // Wait for all downloads to complete
     await Promise.all(promises);
-
-    // Save all verses after the files are downloaded
     await verseRepository.save(verses);
 
     console.log('Database seeding complete.');
