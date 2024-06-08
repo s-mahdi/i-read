@@ -1,4 +1,8 @@
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Module,
+  DynamicModule,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -16,6 +20,16 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { Schedule } from '../schedules/entities/schedule.entity';
 import { SchedulesModule } from '../schedules/schedules.module';
+
+const serveStaticModule: DynamicModule[] =
+  process.env.IS_INTRANET_MODE === 'true'
+    ? [
+        ServeStaticModule.forRoot({
+          rootPath: join(__dirname, '..', 'assets', 'audio'),
+          serveRoot: '/api/audio',
+        }),
+      ]
+    : [];
 
 @Module({
   imports: [
@@ -43,10 +57,7 @@ import { SchedulesModule } from '../schedules/schedules.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '24h' },
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'assets', 'audio'),
-      serveRoot: '/api/audio',
-    }),
+    ...serveStaticModule,
   ],
   controllers: [AppController],
   providers: [
