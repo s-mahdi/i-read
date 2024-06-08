@@ -31,6 +31,8 @@ export default function Index() {
     control,
   } = useForm<IForm>();
 
+  const isIntranet = process.env.NEXT_PUBLIC_IS_INTRANET_MODE === 'true';
+
   const onSubmit = async ({ username, password }: IForm) => {
     try {
       const { data } = await authAPI.login(username, password);
@@ -51,10 +53,7 @@ export default function Index() {
     router.push('/forget-password');
   };
 
-  const handleClose = (
-    _?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
+  const handleClose = (_?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -69,7 +68,7 @@ export default function Index() {
           <h1 className="text-white">من قرآن می‌خوانم</h1>
         </div>
         <p className="mt-auto text-white">
-          تولید شده در عقیدتی سیاسی فرماندهی انتظامی استان همدان
+          تولید شده در معاونت تربیت و آموزش سا.ع.س فراجا
         </p>
       </div>
       <div className="w-96 p-4 mx-auto my-auto flex flex-col">
@@ -86,9 +85,16 @@ export default function Index() {
               <Controller
                 name="username"
                 control={control}
-                rules={{ required: 'شماره پرسنلی الزامی است' }}
+                rules={{
+                  required: isIntranet
+                    ? 'شماره پرسنلی الزامی است'
+                    : 'نام کاربری',
+                }}
                 render={({ field }) => (
-                  <Input {...field} placeholder="شماره پرسنلی" />
+                  <Input
+                    {...field}
+                    placeholder={isIntranet ? 'شماره پرسنلی' : 'نام کاربری'}
+                  />
                 )}
               />
               {errors.username && (

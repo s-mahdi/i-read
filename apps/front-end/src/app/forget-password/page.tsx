@@ -58,7 +58,7 @@ export default function Index() {
           <h1 className="text-white">من قرآن می‌خوانم</h1>
         </div>
         <p className="mt-auto text-white">
-          تولید شده در عقیدتی سیاسی فرماندهی انتظامی استان همدان
+          تولید شده در معاونت تربیت و آموزش سا.ع.س فراجا
         </p>
       </div>
 

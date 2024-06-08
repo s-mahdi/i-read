@@ -14,6 +14,8 @@ export default function SignUpPage() {
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const isIntranet = process.env.NEXT_PUBLIC_IS_INTRANET_MODE === 'true';
+
   const {
     handleSubmit,
     formState: { errors },
@@ -53,7 +55,7 @@ export default function SignUpPage() {
           <h1 className="text-white">من قرآن می‌خوانم</h1>
         </div>
         <p className="mt-auto text-white">
-          تولید شده در عقیدتی سیاسی فرماندهی انتظامی استان همدان
+          تولید شده در معاونت تربیت و آموزش سا.ع.س فراجا
         </p>
       </div>
 
@@ -93,9 +95,16 @@ export default function SignUpPage() {
               <Controller
                 name="username"
                 control={control}
-                rules={{ required: 'شماره پرسنلی الزامی است' }}
+                rules={{
+                  required: isIntranet
+                    ? 'شماره پرسنلی الزامی است'
+                    : 'نام کاربری الزامی است',
+                }}
                 render={({ field }) => (
-                  <Input {...field} placeholder="شماره پرسنلی" />
+                  <Input
+                    {...field}
+                    placeholder={isIntranet ? 'شماره پرسنلی' : 'نام کاربری'}
+                  />
                 )}
               />
               {errors.username && (
@@ -117,17 +126,21 @@ export default function SignUpPage() {
               )}
             </div>
 
-            <div>
-              <Controller
-                name="rank"
-                control={control}
-                rules={{ required: 'درجه الزامی است' }}
-                render={({ field }) => <Input {...field} placeholder="درجه" />}
-              />
-              {errors.rank && (
-                <p className="text-red-500">{errors.rank.message}</p>
-              )}
-            </div>
+            {isIntranet && (
+              <div>
+                <Controller
+                  name="rank"
+                  control={control}
+                  rules={{ required: 'درجه الزامی است' }}
+                  render={({ field }) => (
+                    <Input {...field} placeholder="درجه" />
+                  )}
+                />
+                {errors.rank && (
+                  <p className="text-red-500">{errors.rank.message}</p>
+                )}
+              </div>
+            )}
 
             <div>
               <Controller
