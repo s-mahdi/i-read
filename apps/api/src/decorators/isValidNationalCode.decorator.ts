@@ -3,16 +3,15 @@ import {
   ValidatorConstraintInterface,
   registerDecorator,
   ValidationOptions,
-  ValidationArguments,
 } from 'class-validator';
 
 @ValidatorConstraint({ async: false })
 class IsValidNationalCodeConstraint implements ValidatorConstraintInterface {
-  validate(nationalCode: any, args: ValidationArguments) {
+  validate(nationalCode: any) {
     return isValidNationalCode(nationalCode);
   }
 
-  defaultMessage(args: ValidationArguments) {
+  defaultMessage() {
     return 'کد ملی نامعتبر است.';
   }
 }

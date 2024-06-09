@@ -3,6 +3,5 @@ export interface ISignUpFormParams {
   lastName: string;
   username: string;
   password: string;
-  rank: string;
   nationalCode: string;
 }

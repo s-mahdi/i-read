@@ -1,5 +1,6 @@
-import { IsString, IsNotEmpty, Matches, IsEmail } from 'class-validator';
-import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
+import { IsString, IsNotEmpty, Matches } from 'class-validator';
+import { IsValidNationalCode } from 'src/decorators/isValidNationalCode.decorator';
+import { IsValidPhoneNumber } from 'src/decorators/isValidPhoneNumber.decorator';
 
 const noFarsiRegEx =
   /^[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0600-\u06FF\u06F0-\u06F9]+$/;
@@ -13,7 +14,8 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'وارد کردن نام خانوادگی الزامی است.' })
   lastName: string;
 
-  @IsEmail({}, { message: 'نام کاربری باید به صورت ایمیل باشد.' })
+  @IsValidPhoneNumber({ message: 'شماره تلفن اشتباه است' })
+  @IsNotEmpty({ message: 'وارد کردن شماره تلفن الزامی است' })
   username: string;
 
   @IsString({ message: 'رمز عبور باید به صورت رشته باشد.' })

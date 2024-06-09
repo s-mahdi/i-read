@@ -14,6 +14,8 @@ export default function Index() {
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const isIntranet = process.env.NEXT_PUBLIC_IS_INTRANET_MODE === 'true';
+
   const {
     handleSubmit,
     formState: { errors },
@@ -74,9 +76,18 @@ export default function Index() {
               <Controller
                 name="username"
                 control={control}
-                rules={{ required: 'شماره پرسنلی الزامی است' }}
+                rules={{
+                  required: isIntranet
+                    ? 'شماره پرسنلی الزامی است'
+                    : 'شماره تلفن همراه الزامی است',
+                }}
                 render={({ field }) => (
-                  <Input {...field} placeholder="شماره پرسنلی" />
+                  <Input
+                    {...field}
+                    placeholder={
+                      isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'
+                    }
+                  />
                 )}
               />
               {errors.username && (
@@ -90,7 +101,7 @@ export default function Index() {
                 control={control}
                 rules={{ required: 'کد ملی الزامی است' }}
                 render={({ field }) => (
-                  <Input {...field} placeholder="کد ملی" />
+                  <Input type="number" {...field} placeholder="کد ملی" />
                 )}
               />
               {errors.nationalCode && (

@@ -1,6 +1,6 @@
 'use client';
 
-import { ISignUpFormParams } from '@/@types/ISignUpFormParams';
+import { ISignUpEmployeeFormParams } from '@/@types/ISignUpEmployeeFormParams';
 import { Input } from '@/components';
 import MemoLogo from '@/components/Logo';
 import { useSignUpAPI } from '@/state/useSignUpAPI';
@@ -21,7 +21,7 @@ export default function SignUpPage() {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<ISignUpFormParams>();
+  } = useForm<ISignUpEmployeeFormParams>();
 
   const { mutateAsync: signUpUser, isPending: isUserSignUpPending } =
     useSignUpAPI();
@@ -29,7 +29,7 @@ export default function SignUpPage() {
     useSignUpEmployeeAPI();
   const isPending = isEmployeeSignUpPending || isUserSignUpPending;
 
-  const onSubmit = async (variables: ISignUpFormParams) => {
+  const onSubmit = async (variables: ISignUpEmployeeFormParams) => {
     try {
       const { data } = isIntranet
         ? await signUpEmployee(variables)
@@ -106,12 +106,14 @@ export default function SignUpPage() {
                 rules={{
                   required: isIntranet
                     ? 'شماره پرسنلی الزامی است'
-                    : 'نام کاربری الزامی است',
+                    : 'شماره تلفن همراه الزامی است',
                 }}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    placeholder={isIntranet ? 'شماره پرسنلی' : 'نام کاربری'}
+                    placeholder={
+                      isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'
+                    }
                   />
                 )}
               />
@@ -149,7 +151,6 @@ export default function SignUpPage() {
                 )}
               </div>
             )}
-
             <div>
               <Controller
                 name="password"
@@ -163,7 +164,6 @@ export default function SignUpPage() {
                 <p className="text-red-500">{errors.password.message}</p>
               )}
             </div>
-
             <Button
               type="submit"
               className="bg-primary w-full h-12 rounded-lg text-white"
@@ -175,7 +175,6 @@ export default function SignUpPage() {
                 'ثبت نام'
               )}
             </Button>
-
             <p className="text-center font-light">
               عضو هستید؟{' '}
               <Button
