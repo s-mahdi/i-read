@@ -3,6 +3,7 @@ import {
   ValidatorConstraintInterface,
   registerDecorator,
   ValidationOptions,
+  ValidationArguments,
 } from 'class-validator';
 
 @ValidatorConstraint({ async: false })
@@ -11,7 +12,20 @@ class IsValidPhoneNumberConstraint implements ValidatorConstraintInterface {
     return isValidPhoneNumber(phoneNumber);
   }
 
-  defaultMessage() {
+  defaultMessage(args: ValidationArguments) {
+    const phoneNumber = args.value;
+    if (!phoneNumber) {
+      return 'شماره تلفن نمی‌تواند خالی باشد.';
+    }
+    if (!/^\d+$/.test(phoneNumber)) {
+      return 'شماره تلفن باید فقط شامل اعداد باشد.';
+    }
+    if (phoneNumber.length !== 11) {
+      return 'شماره تلفن باید ۱۱ رقم باشد.';
+    }
+    if (!/^09/.test(phoneNumber)) {
+      return 'شماره تلفن باید با ۰۹ شروع شود.';
+    }
     return 'شماره تلفن نامعتبر است.';
   }
 }

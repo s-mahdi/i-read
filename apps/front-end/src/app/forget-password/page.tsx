@@ -115,7 +115,11 @@ export default function Index() {
                 control={control}
                 rules={{ required: 'کلمه عبور جدید الزامی است' }}
                 render={({ field }) => (
-                  <Input {...field} placeholder="کلمه عبور جدید" />
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="کلمه عبور جدید"
+                  />
                 )}
               />
               {errors.newPassword && (

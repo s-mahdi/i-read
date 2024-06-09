@@ -14,7 +14,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'وارد کردن نام خانوادگی الزامی است.' })
   lastName: string;
 
-  @IsValidPhoneNumber({ message: 'شماره تلفن اشتباه است' })
+  @IsValidPhoneNumber()
   @IsNotEmpty({ message: 'وارد کردن شماره تلفن الزامی است' })
   username: string;
 

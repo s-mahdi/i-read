@@ -111,6 +111,7 @@ export default function SignUpPage() {
                 render={({ field }) => (
                   <Input
                     {...field}
+                    type="number"
                     placeholder={
                       isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'
                     }

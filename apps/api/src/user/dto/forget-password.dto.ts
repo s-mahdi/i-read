@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, Matches } from 'class-validator';
+import { IsNotEmpty, IsString, Matches } from 'class-validator';
 import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
 
 export class ForgetPasswordDto {
@@ -8,7 +8,6 @@ export class ForgetPasswordDto {
   username: string;
 
   @IsNotEmpty({ message: 'وارد کردن کد ملی الزامی است.' })
-  @IsNumber({}, { message: 'کد ملی باید به صورت عدد باشد.' })
   @IsValidNationalCode({ message: 'کد ملی نامعتبر است.' })
   nationalCode: string;
 
