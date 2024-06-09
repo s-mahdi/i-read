@@ -1,15 +1,73 @@
 {
+  "id": "/",
+  "dir": "ltr",
+  "lang": "fa",
   "name": "Man Quran Mikhanam",
-  "short_name": "Quran",
-  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "start_url": "/",
+  "short_name": "Quran",
+  "theme_color": "#ffffff",
+  "description": "قرآت روزانه ۵۰ آیه از قرآن کریم",
+  "orientation": "any",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "display_override": ["window-controls-overlay"],
+  "screenshots": [
+    {
+      "src": "/assets/screenshot1.png"
+    },
+    {
+      "src": "/assets/screenshot2.png"
+    },
+    {
+      "src": "/assets/screenshot3.png"
+    }
+  ],
+  "features": [
+    "Daily Quran reading",
+    "Easy navigation",
+    "Bookmarking",
+    "Audio playback"
+  ],
   "icons": [
     {
-      "src": "/logo.svg",
+      "src": "/icons/logo.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["education", "lifestyle", "religion"],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "edge_side_panel": {},
+  "shortcuts": [
+    {
+      "name": "Start Daily Reading",
+      "short_name": "Daily Reading",
+      "description": "Jump directly into today's reading session",
+      "url": "/?startDailyReading",
+      "icons": [
+        {
+          "src": "/icons/shortcut-icon-256.png",
+          "sizes": "256x256"
+        }
+      ]
     }
   ]
 }
