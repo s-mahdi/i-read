@@ -11,10 +11,6 @@
     "format": "next lint --fix && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore"
   },
   "dependencies": {
-    "next": "^14.2.3",
-    "react": "~18.2.0",
-    "react-dom": "~18.2.0",
-    "react-hook-form": "^7.51.4",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/server": "^11.11.0",
@@ -26,7 +22,12 @@
     "@tanstack/react-query": "^5.34.1",
     "axios": "^1.6.8",
     "moment-jalaali": "^0.10.0",
+    "next": "^14.2.3",
+    "next-pwa": "^5.6.0",
     "pm2": "^5.3.1",
+    "react": "~18.2.0",
+    "react-dom": "~18.2.0",
+    "react-hook-form": "^7.51.4",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
