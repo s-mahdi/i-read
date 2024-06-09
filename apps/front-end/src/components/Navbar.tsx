@@ -3,7 +3,7 @@ import MemoLogo from './Logo';
 import { IUser } from '@/@types/Iuser';
 import PersonIcon from '@mui/icons-material/Person';
 import { useRouter } from 'next/navigation';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import ExitToApp from '@mui/icons-material/ExitToApp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -17,7 +17,9 @@ export const Navbar: React.FC<IProps> = ({ user, children }) => {
   const [isBoxOpen, setIsBoxOpen] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
-  const goToHomePage = () => router.push('/');
+  const goToHomePage = useCallback(() => {
+    router.push('/');
+  }, [router]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,10 +39,12 @@ export const Navbar: React.FC<IProps> = ({ user, children }) => {
     };
   }, [isBoxOpen]);
 
-  const onSignOut = () => {
+  const onSignOut = useCallback(() => {
     localStorage.clear();
     router.push('/login');
-  };
+  }, [router]);
+
+  const { name, lastName } = user;
 
   return (
     <AppBar
@@ -70,7 +74,7 @@ export const Navbar: React.FC<IProps> = ({ user, children }) => {
                 <PersonIcon sx={{ fill: 'white' }} />
               </Avatar>
               <KeyboardArrowDownIcon sx={{ fill: 'white' }} />
-              <p className="text-white">{`${user.name} ${user.lastName}`}</p>
+              <p className="text-white">{`${name} ${lastName}`}</p>
               {isBoxOpen && (
                 <Box
                   className="w-64 absolute left-0 top-[64px] border border-gray-300 bg-white p-4 rounded-xl shadow-lg"
