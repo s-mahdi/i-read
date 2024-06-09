@@ -9,6 +9,7 @@ import { VersesService } from '../verses/verses.service';
 import { SchedulesService } from '../schedules/schedules.service';
 import { CreateScheduleDto } from '../schedules/dto/create-schedule.dto';
 import { Schedule } from '../schedules/entities/schedule.entity';
+import { CreateEmployeeDto } from './dto/create-employee.dto';
 
 @Injectable()
 export class UserService {
@@ -25,7 +26,9 @@ export class UserService {
    * we have defined what are the keys we are expecting from body
    * @returns promise of user
    */
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(
+    createUserDto: CreateUserDto | CreateEmployeeDto,
+  ): Promise<User> {
     const existingUser = await this.userRepository.findOne({
       where: { username: createUserDto.username },
     });

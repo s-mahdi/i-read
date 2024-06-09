@@ -1,10 +1,10 @@
-import { IsString, IsNotEmpty, Matches, IsEmail } from 'class-validator';
+import { IsString, IsNotEmpty, Matches, Length } from 'class-validator';
 import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
 
 const noFarsiRegEx =
   /^[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0600-\u06FF\u06F0-\u06F9]+$/;
 
-export class CreateUserDto {
+export class CreateEmployeeDto {
   @IsString({ message: 'نام باید به صورت رشته باشد.' })
   @IsNotEmpty({ message: 'وارد کردن نام الزامی است.' })
   name: string;
@@ -13,7 +13,12 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'وارد کردن نام خانوادگی الزامی است.' })
   lastName: string;
 
-  @IsEmail({}, { message: 'نام کاربری باید به صورت ایمیل باشد.' })
+  @IsString({ message: 'نام کاربری باید به صورت متن باشد.' })
+  @IsNotEmpty({ message: 'وارد کردن نام کاربری الزامی است.' })
+  @Length(9, 9, { message: 'نام کاربری باید دقیقاً 9 کاراکتر باشد.' })
+  @Matches(/^40\d{7}$/, {
+    message: 'نام کاربری باید با 40 شروع شود و به دنبال آن 7 رقم باشد.',
+  })
   username: string;
 
   @IsString({ message: 'رمز عبور باید به صورت رشته باشد.' })
@@ -26,4 +31,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'وارد کردن کد ملی الزامی است.' })
   @IsValidNationalCode({ message: 'کد ملی نامعتبر است.' })
   nationalCode: string;
+
+  @IsString({ message: 'درجه باید به صورت رشته متنی باشد.' })
+  rank: string;
 }

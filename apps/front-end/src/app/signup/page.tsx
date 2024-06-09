@@ -4,6 +4,7 @@ import { ISignUpFormParams } from '@/@types/ISignUpFormParams';
 import { Input } from '@/components';
 import MemoLogo from '@/components/Logo';
 import { useSignUpAPI } from '@/state/useSignUpAPI';
+import { useSignUpEmployeeAPI } from '@/state/useSignUpEmployeeAPI';
 import { Alert, Button, CircularProgress, Snackbar } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -22,11 +23,18 @@ export default function SignUpPage() {
     control,
   } = useForm<ISignUpFormParams>();
 
-  const { mutateAsync, isPending } = useSignUpAPI();
+  const { mutateAsync: signUpUser, isPending: isUserSignUpPending } =
+    useSignUpAPI();
+  const { mutateAsync: signUpEmployee, isPending: isEmployeeSignUpPending } =
+    useSignUpEmployeeAPI();
+  const isPending = isEmployeeSignUpPending || isUserSignUpPending;
 
   const onSubmit = async (variables: ISignUpFormParams) => {
     try {
-      const { data } = await mutateAsync(variables);
+      const { data } = isIntranet
+        ? await signUpEmployee(variables)
+        : await signUpUser(variables);
+
       localStorage.setItem('jwtToken', data.access_token);
       router.replace('/');
     } catch (e: any) {

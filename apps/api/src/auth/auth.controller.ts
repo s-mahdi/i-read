@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { Public } from '../decorators/public.decorator';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { ForgetPasswordDto } from '../user/dto/forget-password.dto';
+import { CreateEmployeeDto } from 'src/user/dto/create-employee.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,13 @@ export class AuthController {
   @Post('signup')
   signup(@Body() signUpDto: CreateUserDto) {
     return this.authService.signup(signUpDto);
+  }
+
+  @HttpCode(HttpStatus.CREATED)
+  @Public()
+  @Post('signup-employee')
+  signupEmployee(@Body() signUpDto: CreateEmployeeDto) {
+    return this.authService.signupEmployee(signUpDto);
   }
 
   @Post('forget-password')

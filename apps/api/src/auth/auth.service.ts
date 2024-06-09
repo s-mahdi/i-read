@@ -7,12 +7,13 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { CreateEmployeeDto } from 'src/user/dto/create-employee.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {}
 
   async login(username: string, pass: string): Promise<any> {
@@ -34,6 +35,14 @@ export class AuthService {
     };
   }
 
+  async signupEmployee(signUpDto: CreateEmployeeDto): Promise<any> {
+    const user = await this.userService.createUser(signUpDto);
+    const payload = { username: user.username, sub: user.id, role: user.role };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
   async resetPassword({
     username,
     nationalCode,
@@ -42,12 +51,12 @@ export class AuthService {
     const user = await this.userService.findOneByUserName(username);
     if (!user) {
       throw new NotFoundException(
-        'اطلاعات وارد شده صحیح نیست یا کاربری با مشخصات وارد شده وجود ندارد'
+        'اطلاعات وارد شده صحیح نیست یا کاربری با مشخصات وارد شده وجود ندارد',
       );
     }
     if (user.nationalCode !== nationalCode) {
       throw new UnauthorizedException(
-        'اطلاعات وارد شده صحیح نیست یا کاربری با مشخصات وارد شده وجود ندارد'
+        'اطلاعات وارد شده صحیح نیست یا کاربری با مشخصات وارد شده وجود ندارد',
       );
     }
     await this.userService.updatePassword(user.id, newPassword);
