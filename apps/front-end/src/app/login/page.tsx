@@ -61,18 +61,23 @@ export default function Index() {
   };
 
   return (
-    <div className="flex mx-auto h-screen">
+    <div className="flex h-screen">
       <div className="hidden md:flex flex-col w-1/2 bg-primary px-20 py-40 bg-[linear-gradient(to_left,#32B7C5,rgba(0,0,0,0)),url('/login-bg.png')] bg-cover">
         <div className="flex items-center gap-x-2">
           <MemoLogo fontSize={120} />
           <h1 className="text-white">من قرآن می‌خوانم</h1>
         </div>
         <p className="mt-auto text-white">
-          تولید شده در معاونت تربیت و آموزش سا.ع.س فراجا
+          تولید شده در معاونت ٰتربیت و آموزش سا.ع.س فراجا
         </p>
       </div>
-      <div className="w-96 p-4 mx-auto my-auto flex flex-col">
+
+      <div className="w-96 p-4 mx-auto md:my-auto flex flex-col">
         <div className="space-y-4">
+          <div className="flex flex-col md:hidden justify-center items-center py-8 space-y-2">
+            <MemoLogo fontSize={120} primary />
+            <h1 className="text-primary">من قرآن می‌خوانم</h1>
+          </div>
           <div>
             <h2 className="font-bold">خوش آمدید</h2>
             <p className="text-neutral-500">قرائت روزانه ۵۰ آیه از قرآن کریم</p>
@@ -140,6 +145,12 @@ export default function Index() {
               </button>
             </p>
           </form>
+        </div>
+
+        <div className="block md:hidden mt-auto">
+          <p className="text-center font-thin text-sm">
+            تولید شده در معاونت ٰتربیت و آموزش سا.ع.س فراجا
+          </p>
         </div>
       </div>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
