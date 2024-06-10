@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mahdi.manquranmikhanam",
+      "sha256_cert_fingerprints": [
+        "2C:64:87:EE:D4:2A:B6:FA:15:0F:DA:98:3B:3B:35:80:90:51:4F:54:3B:19:9E:39:EF:42:9D:D9:50:40:15:3C"
+      ]
+    }
+  }
+]
