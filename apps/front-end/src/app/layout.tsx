@@ -26,14 +26,13 @@ const taha = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'من قرآن میخوانم',
+  title: 'من قرآن می‌خوانم',
   description: 'قرآت روزانه ۵۰ آیه از قرآن کریم',
-  applicationName: 'من قرآن میخوانم',
+  applicationName: 'من قرآن می‌خوانم',
   manifest: '/manifest.json',
-  themeColor: '#ffffff',
   appleWebApp: {
     capable: true,
-    title: 'من قرآن میخوانم',
+    title: 'من قرآن می‌خوانم',
     statusBarStyle: 'default',
   },
   formatDetection: {
@@ -41,7 +40,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    title: 'من قرآن میخوانم',
+    title: 'من قرآن می‌خوانم',
     description: 'قرآت روزانه ۵۰ آیه از قرآن کریم',
     url: process.env.NEXT_PUBLIC_BASE_URL
       ? new URL(process.env.NEXT_PUBLIC_BASE_URL)
@@ -103,6 +102,10 @@ export const metadata: Metadata = {
   metadataBase: process.env.NEXT_PUBLIC_BASE_URL
     ? new URL(process.env.NEXT_PUBLIC_BASE_URL)
     : undefined,
+};
+
+export const viewport = {
+  themeColor: '#ffffff',
 };
 
 export default function RootLayout({

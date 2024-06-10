@@ -84,6 +84,7 @@ export default function Index() {
                 render={({ field }) => (
                   <Input
                     {...field}
+                    type="number"
                     placeholder={
                       isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'
                     }
