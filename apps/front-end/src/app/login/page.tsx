@@ -147,7 +147,7 @@ export default function Index() {
           </form>
         </div>
 
-        <div className="block md:hidden mt-auto mb-8">
+        <div className="block md:hidden mt-auto">
           <p className="text-center font-thin text-sm">
             سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
           </p>
