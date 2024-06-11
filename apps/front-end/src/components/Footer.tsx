@@ -5,7 +5,7 @@ export const Footer = () => {
     <Box className="bg-primaryDark p-4" component="footer">
       <Container>
         <p className="text-primaryLight text-end">
-          تولید شده در معاونت ٰتربیت و آموزش سا.ع.س فراجا
+          سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
         </p>
       </Container>
     </Box>

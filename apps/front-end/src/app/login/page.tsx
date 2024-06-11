@@ -68,7 +68,7 @@ export default function Index() {
           <h1 className="text-white">من قرآن می‌خوانم</h1>
         </div>
         <p className="mt-auto text-white">
-          تولید شده در معاونت ٰتربیت و آموزش سا.ع.س فراجا
+          سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
         </p>
       </div>
 
@@ -147,9 +147,9 @@ export default function Index() {
           </form>
         </div>
 
-        <div className="block md:hidden mt-auto">
+        <div className="block md:hidden mt-auto mb-8">
           <p className="text-center font-thin text-sm">
-            تولید شده در معاونت ٰتربیت و آموزش سا.ع.س فراجا
+            سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
           </p>
         </div>
       </div>
