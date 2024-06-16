@@ -1,3 +1,5 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import type { Metadata } from 'next';
 import localFont from '@next/font/local';
 import './global.css';
