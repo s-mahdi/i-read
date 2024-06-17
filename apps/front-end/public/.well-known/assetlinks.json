@@ -8,5 +8,12 @@
         "23:61:F6:4B:0D:02:F5:96:F0:10:B0:F5:9B:8E:45:82:AC:C0:AA:6B:15:9A:C4:DF:51:E7:7C:74:4D:EB:D2:81"
       ]
     }
+  },
+  {
+    "relation": ["check_validation"],
+    "target": {
+      "namespace": "cafebazaar_twa",
+      "package_name": "run.liara.quran_frontend.twa"
+    }
   }
 ]
