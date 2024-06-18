@@ -9,7 +9,7 @@ import { useFinishScheduleAPI } from '@/state/useFinishScheduleAPI';
 import { useVersesAPI } from '@/state/useVersesAPI';
 import { Button, Container } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Actions = ({
   onBackClick,
@@ -35,7 +35,11 @@ const Actions = ({
 );
 
 const QuranPage = ({ params }: any) => {
-  const { data: profileData, isLoading: isProfileLoading } = useProfileAPI();
+  const {
+    data: profileData,
+    isLoading: isProfileLoading,
+    error,
+  } = useProfileAPI();
   const { mutateAsync: finishSchedule } = useFinishScheduleAPI();
   const { data: versesData, isLoading: isVersesLoading } = useVersesAPI(
     params.id
@@ -43,6 +47,14 @@ const QuranPage = ({ params }: any) => {
   const router = useRouter();
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [currentSura, setCurrentSura] = useState(0);
+
+  useEffect(() => {
+    const jwtToken = localStorage.getItem('jwtToken');
+    if (!jwtToken || error?.response?.status === 401) {
+      localStorage.clear();
+      router.push('/login');
+    }
+  }, [error?.response?.status, router]);
 
   if (
     !profileData?.data ||
