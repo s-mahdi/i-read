@@ -1,9 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { join } from 'path';
-import * as fs from 'fs';
-import * as readline from 'readline';
-import * as dotenv from 'dotenv';
-import { zipAsync } from './utils/zipAsync';
+import fs from 'fs';
+import dotenv from 'dotenv';
 import { quranIndex } from './assets/quranIndex';
 import { EntityManager } from 'typeorm';
 import { Verse } from './verses/entities/verse.entity';
@@ -20,20 +18,54 @@ const requiredVariables = [
   'STATIC_FILES_BASE_URL',
 ];
 
-const missingVariables = requiredVariables.filter(
-  (variable) => !(variable in process.env),
-);
-
-if (missingVariables.length > 0) {
-  console.error(
-    `Error: Required environment variables are missing: ${missingVariables.join(
-      ', ',
-    )}`,
+const checkEnvironmentVariables = () => {
+  const missingVariables = requiredVariables.filter(
+    (variable) => !(variable in process.env),
   );
-  process.exit(1);
-}
 
-async function seedQuranDatabase() {
+  if (missingVariables.length > 0) {
+    console.error(
+      `Error: Required environment variables are missing: ${missingVariables.join(
+        ', ',
+      )}`,
+    );
+    process.exit(1);
+  }
+};
+
+const readFileLines = (filePath) => {
+  return fs.readFileSync(filePath, 'utf-8').split('\n');
+};
+
+const padWithZeros = (number, length) => {
+  return number.toString().padStart(length, '0');
+};
+
+const createVerse = (
+  index,
+  suraId,
+  order,
+  translation,
+  originalLine,
+  audioUrl,
+) => {
+  const verse = new Verse();
+  verse.id = index + 1;
+  verse.suraId = parseInt(suraId, 10);
+  verse.order = parseInt(order, 10);
+  verse.translation = translation;
+  verse.text = originalLine.split('|')[2];
+  verse.audioUrl = audioUrl;
+
+  const suraIndex = parseInt(suraId, 10) - 1;
+  verse.sura = quranIndex[suraIndex].titleAr;
+
+  return verse;
+};
+
+const seedQuranDatabase = async () => {
+  checkEnvironmentVariables();
+
   const app = await NestFactory.createApplicationContext(AppModule);
 
   try {
@@ -45,22 +77,9 @@ async function seedQuranDatabase() {
     const originalFilePath = join(basePath, 'ara-quranuthmanienc.txt');
     const translationFilePath = join(basePath, 'fas-abdolmohammaday.txt');
 
-    const originalFile = readline.createInterface({
-      input: fs.createReadStream(originalFilePath),
-      output: process.stdout,
-      terminal: false,
-    });
+    const originalLines = readFileLines(originalFilePath);
+    const translationLines = readFileLines(translationFilePath);
 
-    const translationFile = readline.createInterface({
-      input: fs.createReadStream(translationFilePath),
-      output: process.stdout,
-      terminal: false,
-    });
-
-    const originalLines = readLines(originalFile);
-    const translationLines = readLines(translationFile);
-
-    let i = 0;
     const audioDir = join(__dirname, 'assets/audio');
     if (!fs.existsSync(audioDir)) {
       fs.mkdirSync(audioDir, { recursive: true });
@@ -68,31 +87,27 @@ async function seedQuranDatabase() {
 
     const verses = [];
 
-    for await (const [originalLine, translationLine] of zipAsync(
-      originalLines,
-      translationLines,
-    )) {
+    for (
+      let i = 0;
+      i < Math.min(originalLines.length, translationLines.length);
+      i++
+    ) {
+      const originalLine = originalLines[i];
+      const translationLine = translationLines[i];
+
       const [suraId, order, translation] = translationLine.split('|');
-      const audioFileName = `${padWithZeros(suraId, 3)}-${padWithZeros(
-        order,
-        3,
-      )}.mp3`;
+      const audioFileName = `${padWithZeros(suraId, 3)}-${padWithZeros(order, 3)}.mp3`;
       const audioUrl = `${process.env.STATIC_FILES_BASE_URL}${audioFileName}`;
 
-      const verse = new Verse();
-      verse.id = i + 1;
-      verse.suraId = parseInt(suraId);
-      verse.order = parseInt(order);
-      verse.translation = translation;
-      verse.text = originalLine.split('|')[2];
-      verse.audioUrl = audioUrl;
-
-      const id = parseInt(suraId) - 1;
-      verse.sura = quranIndex[id].titleAr;
-
+      const verse = createVerse(
+        i,
+        suraId,
+        order,
+        translation,
+        originalLine,
+        audioUrl,
+      );
       verses.push(verse);
-
-      i++;
     }
 
     await verseRepository.save(verses);
@@ -103,16 +118,6 @@ async function seedQuranDatabase() {
   } finally {
     await app.close();
   }
-}
-
-function padWithZeros(number: string, length: number): string {
-  return number.padStart(length, '0');
-}
-
-async function* readLines(rl: readline.Interface): AsyncIterable<string> {
-  for await (const line of rl) {
-    yield line;
-  }
-}
+};
 
 seedQuranDatabase();

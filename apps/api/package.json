@@ -12,7 +12,6 @@
     "start:debug": "nest start --debug --watch",
     "start": "node dist/src/main",
     "seed:verses": "ts-node -r ./tsconfig.json ./src/quranDBSeed.ts",
-    "seed:verses:liara": "ts-node -r ./tsconfig.json ./src/liaraDBSeed.ts",
     "seed:audio:liara": "ts-node -r ./tsconfig.json ./src/checkAndUploadAudioFiles.ts"
   },
   "dependencies": {
