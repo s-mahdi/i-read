@@ -5,7 +5,6 @@ import * as readline from 'readline';
 import * as dotenv from 'dotenv';
 import { zipAsync } from './utils/zipAsync';
 import { quranIndex } from './assets/quranIndex';
-import axios from 'axios';
 import { EntityManager } from 'typeorm';
 import { Verse } from './verses/entities/verse.entity';
 import { AppModule } from './app/app.module';
@@ -44,7 +43,7 @@ async function seedQuranDatabase() {
 
     const basePath = join(__dirname, 'assets');
     const originalFilePath = join(basePath, 'ara-quranuthmanienc.txt');
-    const translationFilePath = join(basePath, 'fas-abolfazlbahramp.txt');
+    const translationFilePath = join(basePath, 'fas-abdolmohammaday.txt');
 
     const originalFile = readline.createInterface({
       input: fs.createReadStream(originalFilePath),
@@ -67,7 +66,6 @@ async function seedQuranDatabase() {
       fs.mkdirSync(audioDir, { recursive: true });
     }
 
-    const promises = [];
     const verses = [];
 
     for await (const [originalLine, translationLine] of zipAsync(
@@ -80,7 +78,6 @@ async function seedQuranDatabase() {
         3,
       )}.mp3`;
       const audioUrl = `${process.env.STATIC_FILES_BASE_URL}${audioFileName}`;
-      const localAudioPath = join(audioDir, audioFileName);
 
       const verse = new Verse();
       verse.id = i + 1;
@@ -95,14 +92,9 @@ async function seedQuranDatabase() {
 
       verses.push(verse);
 
-      if (!fs.existsSync(localAudioPath)) {
-        promises.push(downloadAudio(audioUrl, localAudioPath));
-      }
-
       i++;
     }
 
-    await Promise.all(promises);
     await verseRepository.save(verses);
 
     console.log('Database seeding complete.');
@@ -121,21 +113,6 @@ async function* readLines(rl: readline.Interface): AsyncIterable<string> {
   for await (const line of rl) {
     yield line;
   }
-}
-
-async function downloadAudio(url: string, path: string) {
-  const response = await axios({
-    method: 'get',
-    url,
-    responseType: 'stream',
-    timeout: 600000,
-  });
-
-  response.data.pipe(fs.createWriteStream(path));
-  return new Promise((resolve, reject) => {
-    response.data.on('end', () => resolve(path));
-    response.data.on('error', reject);
-  });
 }
 
 seedQuranDatabase();
