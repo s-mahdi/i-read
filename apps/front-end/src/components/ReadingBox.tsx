@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { Typography, Tooltip, IconButton } from '@mui/material';
-import PlayIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
 import VerseIcon from './VerseIcon';
 import { toIndiaDigits } from '@/function/toIndiaDigits';
+import PlayIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import MemoPause from './Pause';
+import MemoPlay from './Play';
 
 interface IVerse {
   text: string;
@@ -50,7 +51,7 @@ export const ReadingBox = ({
   }, [playingIndex]);
 
   return (
-    <div className="shadow-xl rounded-2xl overflow-hidden ">
+    <div className="shadow-xl rounded-2xl overflow-hidden">
       <div className="bg-gray-100 p-4">
         <p className="font-semibold text-lg text-gray-800 text-center">
           {sura}
@@ -84,32 +85,34 @@ export const ReadingBox = ({
                 </span>
                 <VerseIcon fontSize={40} />
               </div>
-              <Typography
+              <p
                 className={`text-4xl font-taha ${
                   index === playingIndex ? 'text-primary' : 'text-gray-900'
                 }`}
               >
                 {text}
-              </Typography>
+              </p>
             </div>
             <p
               className={`${
                 index === playingIndex ? 'text-primary' : 'text-gray-900'
               }`}
-            >{`${toIndiaDigits(order)}. ${translation}`}</p>
+            >
+              {`${toIndiaDigits(order)}. ${translation}`}
+            </p>
             <div className="flex flex-row-reverse">
-              <Tooltip title="پخش" enterDelay={500} leaveDelay={200}>
-                <IconButton onClick={() => handlePlay(index)}>
+              <div className="tooltip" data-tooltip="پخش">
+                <button
+                  onClick={() => handlePlay(index)}
+                  className="focus:outline-none"
+                >
                   {playingIndex === index ? (
-                    <PauseIcon
-                      fontSize="large"
-                      sx={{ color: 'primary.main' }}
-                    />
+                    <MemoPause fill="#32B7C5" fontSize="32" />
                   ) : (
-                    <PlayIcon fontSize="large" sx={{ color: 'primary.main' }} />
+                    <MemoPlay fill="#32B7C5" fontSize="32" />
                   )}
-                </IconButton>
-              </Tooltip>
+                </button>
+              </div>
             </div>
             <hr className="border-[0.5px] border-gray-300 w-full mt-4" />
           </div>

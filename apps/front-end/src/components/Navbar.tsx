@@ -1,11 +1,12 @@
-import { AppBar, Avatar, Box, Button, Container, Toolbar } from '@mui/material';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import MemoLogo from './Logo';
 import { IUser } from '@/@types/Iuser';
-import PersonIcon from '@mui/icons-material/Person';
-import { useRouter } from 'next/navigation';
-import { useRef, useState, useEffect, useCallback } from 'react';
 import ExitToApp from '@mui/icons-material/ExitToApp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import MemoPerson from './Person';
+import MemoArrowDown from './ArrowDown';
+import MemoExit from './Exit';
 
 interface IProps {
   user: IUser;
@@ -47,49 +48,43 @@ export const Navbar: React.FC<IProps> = ({ user, children }) => {
   const { name, lastName } = user;
 
   return (
-    <AppBar
-      className="flex justify-center bg-primary h-[72px]"
-      position="sticky"
-    >
-      <Container>
-        <Toolbar className="flex justify-between">
+    <div className="sticky top-0 z-10 flex justify-center bg-primary h-[72px]">
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center h-full px-4">
           <div
             onClick={goToHomePage}
-            className="flex items-center gap-x-2 hover:cursor-pointer"
+            className="flex items-center gap-x-2 cursor-pointer"
           >
             <MemoLogo fontSize={48} />
             <p className="text-white">من قرآن می‌خوانم</p>
           </div>
-          <div className="flex gap-x-4">
+          <div className="flex items-center gap-x-4">
             <div className="hidden md:flex gap-x-2">{children}</div>
-            <Box
+            <div
               ref={boxRef}
-              className="flex items-center gap-x-2 relative"
-              component="button"
+              className="flex items-center gap-x-2 relative cursor-pointer"
               onClick={() => setIsBoxOpen(!isBoxOpen)}
             >
-              <Avatar
-                sx={{ bgcolor: 'primary.main', mr: 1, cursor: 'pointer' }}
-              >
-                <PersonIcon sx={{ fill: 'white' }} />
-              </Avatar>
-              <KeyboardArrowDownIcon sx={{ fill: 'white' }} />
+              <div className="bg-primary-main rounded-full mr-1">
+                <MemoPerson fontSize={32} fill="white" />
+              </div>
+              <MemoArrowDown fontSize={24} fill="white" />
               <p className="text-white">{`${name} ${lastName}`}</p>
               {isBoxOpen && (
-                <Box
-                  className="w-64 absolute left-0 top-[64px] border border-gray-300 bg-white p-4 rounded-xl shadow-lg"
-                  zIndex={10}
-                >
-                  <Button className="flex" onClick={onSignOut}>
-                    <ExitToApp className="ml-4" />
-                    خروج از حساب کاربری
-                  </Button>
-                </Box>
+                <div className="w-64 absolute left-0 top-[64px] border border-gray-300 bg-white p-4 rounded-xl shadow-lg z-10">
+                  <button
+                    className="flex items-center bg-white w-full text-left px-2 py-2 gap-2"
+                    onClick={onSignOut}
+                  >
+                    <MemoExit fontSize={24} />
+                    <p>خروج از حساب کاربری</p>
+                  </button>
+                </div>
               )}
-            </Box>
+            </div>
           </div>
-        </Toolbar>
-      </Container>
-    </AppBar>
+        </div>
+      </div>
+    </div>
   );
 };

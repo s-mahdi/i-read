@@ -7,7 +7,6 @@ import { LoaderLayout } from '@/layouts/LoaderLayout';
 import { useProfileAPI } from '@/state/useProfile';
 import { useFinishScheduleAPI } from '@/state/useFinishScheduleAPI';
 import { useVersesAPI } from '@/state/useVersesAPI';
-import { Button, Container } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -19,18 +18,18 @@ const Actions = ({
   onFinishClick: () => void;
 }) => (
   <>
-    <Button
-      className="text-white border border-white px-2"
+    <button
+      className="text-white border border-white px-2 py-1 rounded bg-inherit hover:bg-white hover:text-primary transition-colors duration-300"
       onClick={onBackClick}
     >
       بازگشت
-    </Button>
-    <Button
-      className="text-white border border-white px-2"
+    </button>
+    <button
+      className="text-white border border-white px-2 py-1 rounded bg-inherit hover:bg-white hover:text-primary transition-colors duration-300"
       onClick={onFinishClick}
     >
       اتمام قرائت
-    </Button>
+    </button>
   </>
 );
 
@@ -105,11 +104,11 @@ const QuranPage = ({ params }: any) => {
   };
 
   return (
-    <div className="bg-primary bg-fixed bg-[url('/login-bg.png')] bg-cover">
+    <div className="bg-primary bg-fixed bg-[url('/login-bg.png')] bg-cover min-h-screen">
       <Navbar user={profileData.data}>
         <Actions onBackClick={onBackClick} onFinishClick={onFinishClick} />
       </Navbar>
-      <Container className="py-8 space-y-8">
+      <div className="container mx-auto py-8 space-y-8 px-4">
         {suraDataArray.map((suraData, i) => (
           <ReadingBox
             key={i}
@@ -120,17 +119,17 @@ const QuranPage = ({ params }: any) => {
             handleAudioEnded={handleAudioEnded}
           />
         ))}
-      </Container>
+      </div>
       <Footer />
       <div className="fixed bottom-0 left-0 right-0 bg-primary md:hidden">
-        <Container>
-          <Button
-            className="text-white w-full h-full p-4"
+        <div className="container mx-auto px-4">
+          <button
+            className="text-white bg-inherit w-full h-full p-4"
             onClick={onFinishClick}
           >
             اتمام قرائت
-          </Button>
-        </Container>
+          </button>
+        </div>
       </div>
     </div>
   );

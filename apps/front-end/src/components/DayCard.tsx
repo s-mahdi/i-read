@@ -1,7 +1,7 @@
-import { Card } from '@mui/material';
 import React from 'react';
 import VerseIcon from './VerseIcon';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import MemoVerified from './Verified';
 
 interface IProps {
   date: Date;
@@ -12,9 +12,8 @@ interface IProps {
 
 export const DayCard = ({ date, suraList, isRead, onClick }: IProps) => {
   return (
-    <Card
-      elevation={4}
-      className="min-h-[88px] px-4 py-6 rounded-xl hover:bg-gray-100 transition-colors duration-300 hover:cursor-pointer"
+    <div
+      className="border border-gray-100 shadow-lg min-h-[88px] px-4 py-6 rounded-xl hover:bg-gray-100 transition-colors duration-300 cursor-pointer"
       onClick={onClick}
     >
       <div className="flex items-center justify-between gap-x-4">
@@ -32,11 +31,11 @@ export const DayCard = ({ date, suraList, isRead, onClick }: IProps) => {
               month: 'short',
             }).format(date)}
           </p>
-          {isRead && <VerifiedIcon color="primary" />}
+          {isRead && <MemoVerified fontSize={24} color="#32B7C5" />}
         </div>
 
         <p>{suraList}</p>
       </div>
-    </Card>
+    </div>
   );
 };

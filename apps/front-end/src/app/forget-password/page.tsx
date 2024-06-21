@@ -137,7 +137,7 @@ export default function Index() {
             <button
               type="button"
               onClick={onLoginClick}
-              className="text-primary hover:underline w-full text-center mt-4"
+              className="text-primary bg-inherit hover:underline w-full text-center mt-4"
             >
               بازگشت به صفحه ورود
             </button>

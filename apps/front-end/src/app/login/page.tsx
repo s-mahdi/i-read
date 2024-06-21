@@ -123,7 +123,7 @@ export default function Index() {
               <button
                 type="button"
                 onClick={onForgotPasswordClick}
-                className="text-primary hover:underline w-full text-left text-sm"
+                className="text-primary bg-inherit hover:underline w-full text-left text-sm"
               >
                 کلمه عبور خود را فراموش کرده اید؟
               </button>
@@ -139,7 +139,7 @@ export default function Index() {
               <button
                 type="button"
                 onClick={onSignUpClick}
-                className="text-primary hover:underline hover"
+                className="text-primary bg-inherit hover:underline hover"
               >
                 ثبت نام کنید
               </button>

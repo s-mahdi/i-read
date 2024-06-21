@@ -10,6 +10,9 @@ module.exports = {
     tailwindcss: {
       config: join(__dirname, 'tailwind.config.ts'),
     },
+    'postcss-preset-env': {
+      browsers: 'last 2 versions',
+    },
     autoprefixer: {},
   },
 };

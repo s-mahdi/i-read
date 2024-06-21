@@ -182,7 +182,7 @@ export default function SignUpPage() {
                 disabled={isPending}
                 type="button"
                 onClick={onLoginClick}
-                className="text-primary hover:underline hover"
+                className="text-primary bg-inherit hover:underline hover"
               >
                 وارد شوید
               </Button>

@@ -55,6 +55,13 @@ p {
   color: black;
 }
 
+button,
+button:focus,
+button:hover,
+button:active {
+  color: inherit;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
