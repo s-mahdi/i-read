@@ -5,5 +5,9 @@ const withPWA = require('next-pwa')({
 });
 
 module.exports = withPWA({
-  swcMinify: true
+  swcMinify: true,
+  compiler: {
+    emotion: true,
+    removeConsole: true,
+  },
 });
