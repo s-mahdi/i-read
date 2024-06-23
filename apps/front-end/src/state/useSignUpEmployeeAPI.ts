@@ -1,5 +1,5 @@
 import { ISignUpEmployeeFormParams } from '@/@types/ISignUpEmployeeFormParams';
-import { authAPI } from '@/httpClient/authAPI';
+import { api } from '@/httpClient/api';
 import {
   UseMutationOptions,
   useMutation,
@@ -23,7 +23,7 @@ type Options = Omit<
 export const useSignUpEmployeeAPI = (options?: Options) => {
   return useMutation<Data, Errors, Param, SignUpMutationFn>({
     mutationFn: async (params) => {
-      const res = await authAPI.signUpEmployee(params);
+      const res = await api.auth.signUpEmployee(params);
       return res;
     },
     ...options,

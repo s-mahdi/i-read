@@ -1,4 +1,4 @@
-import { scheduleAPI } from '@/httpClient/scheduleAPI';
+import { api } from '@/httpClient/api';
 import {
   useMutation,
   UseMutationOptions,
@@ -24,7 +24,7 @@ type Options = Omit<
 export const useFinishScheduleAPI = (options?: Options) => {
   return useMutation<Data, Errors, Param, FinishScheduleMutationFn>({
     mutationFn: async (id) => {
-      const res = await scheduleAPI.finishSchedule(id);
+      const res = await api.schedule.finishSchedule(id);
       return res;
     },
     ...options,

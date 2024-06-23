@@ -3,11 +3,11 @@
 import { IForgetPasswordParams } from '@/@types/IForgetPasswordParams';
 import { Input } from '@/components';
 import MemoLogo from '@/components/icons/Logo';
-import { authAPI } from '@/httpClient/authAPI';
 import { useRouter } from 'next/navigation';
 import { Alert, Snackbar } from '@mui/material';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { api } from '@/httpClient/api';
 
 export default function Index() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function Index() {
     nationalCode,
   }: IForgetPasswordParams) => {
     try {
-      await authAPI.forgetPassword({
+      await api.auth.forgetPassword({
         username,
         nationalCode,
         newPassword,

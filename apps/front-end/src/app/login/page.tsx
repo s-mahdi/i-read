@@ -2,12 +2,12 @@
 
 import { Input } from '@/components';
 import MemoLogo from '@/components/icons/Logo';
-import { authAPI } from '@/httpClient/authAPI';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { api } from '@/httpClient/api';
 
 interface IForm {
   username: string;
@@ -35,7 +35,7 @@ export default function Index() {
 
   const onSubmit = async ({ username, password }: IForm) => {
     try {
-      const { data } = await authAPI.login(username, password);
+      const { data } = await api.auth.login(username, password);
       localStorage.setItem('jwtToken', data.access_token);
       router.replace('/');
     } catch (e: any) {

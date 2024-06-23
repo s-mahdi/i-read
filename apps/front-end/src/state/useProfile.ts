@@ -1,5 +1,5 @@
 import { IUser } from '@/@types/Iuser';
-import { userAPI } from '@/httpClient/userAPI';
+import { api } from '@/httpClient/api';
 import { DefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 
@@ -14,6 +14,6 @@ type Options = Omit<
 export const useProfileAPI = (options?: Options) =>
   useQuery<TData, TError>({
     queryKey: [GET_PROFILE_QUERY_KEY],
-    queryFn: async () => userAPI.getProfile(),
+    queryFn: async () => api.user.getProfile(),
     ...options,
   });

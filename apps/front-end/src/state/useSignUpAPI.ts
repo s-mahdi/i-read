@@ -1,5 +1,5 @@
 import { ISignUpFormParams } from '@/@types/ISignUpFormParams';
-import { authAPI } from '@/httpClient/authAPI';
+import { api } from '@/httpClient/api';
 import {
   UseMutationOptions,
   useMutation,
@@ -23,7 +23,7 @@ type Options = Omit<
 export const useSignUpAPI = (options?: Options) => {
   return useMutation<Data, Errors, Param, SignUpMutationFn>({
     mutationFn: async (params) => {
-      const res = await authAPI.signUp(params);
+      const res = await api.auth.signUp(params);
       return res;
     },
     ...options,

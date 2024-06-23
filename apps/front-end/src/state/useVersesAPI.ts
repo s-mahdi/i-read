@@ -1,5 +1,5 @@
 import { IVerse } from '@/@types/IVerse';
-import { quranAPI } from '@/httpClient/quranAPI';
+import { api } from '@/httpClient/api';
 import { DefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
@@ -16,7 +16,7 @@ export const useVersesAPI = (scheduleId: number, options?: Options) =>
     queryKey: [GET_VERSES_QUERY_KEY],
     queryFn: async () => {
       try {
-        const res = await quranAPI.getVersesByScheduleId(scheduleId);
+        const res = await api.quran.getVersesByScheduleId(scheduleId);
         if (res.status === 200) {
           return res.data;
         }

@@ -9,29 +9,7 @@ import { useFinishScheduleAPI } from '@/state/useFinishScheduleAPI';
 import { useVersesAPI } from '@/state/useVersesAPI';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-const Actions = ({
-  onBackClick,
-  onFinishClick,
-}: {
-  onBackClick: () => void;
-  onFinishClick: () => void;
-}) => (
-  <>
-    <button
-      className="text-white border border-white px-2 py-1 rounded bg-inherit hover:bg-white hover:text-primary transition-colors duration-300"
-      onClick={onBackClick}
-    >
-      بازگشت
-    </button>
-    <button
-      className="text-white border border-white px-2 py-1 rounded bg-inherit hover:bg-white hover:text-primary transition-colors duration-300"
-      onClick={onFinishClick}
-    >
-      اتمام قرائت
-    </button>
-  </>
-);
+import { NavbarActions } from './navbarActions';
 
 const QuranPage = ({ params }: any) => {
   const {
@@ -106,7 +84,10 @@ const QuranPage = ({ params }: any) => {
   return (
     <div className="bg-primary bg-fixed bg-[url('/login-bg.png')] bg-cover min-h-screen">
       <Navbar user={profileData.data}>
-        <Actions onBackClick={onBackClick} onFinishClick={onFinishClick} />
+        <NavbarActions
+          onBackClick={onBackClick}
+          onFinishClick={onFinishClick}
+        />
       </Navbar>
       <div className="container mx-auto py-8 space-y-8 px-4">
         {suraDataArray.map((suraData, i) => (
