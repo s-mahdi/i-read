@@ -2,7 +2,7 @@
 
 import { IForgetPasswordParams } from '@/@types/IForgetPasswordParams';
 import { Input } from '@/components';
-import MemoLogo from '@/components/Logo';
+import MemoLogo from '@/components/icons/Logo';
 import { authAPI } from '@/httpClient/authAPI';
 import { useRouter } from 'next/navigation';
 import { Alert, Snackbar } from '@mui/material';

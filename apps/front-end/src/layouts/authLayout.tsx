@@ -1,4 +1,4 @@
-import MemoLogo from '@/components/Logo';
+import MemoLogo from '@/components/icons/Logo';
 import React, { ReactNode } from 'react';
 
 export const AuthLayout: React.FC<{ children: ReactNode }> = ({ children }) => {

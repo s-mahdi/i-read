@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import MemoLogo from './Logo';
+import MemoLogo from './icons/Logo';
 import { IUser } from '@/@types/Iuser';
 import ExitToApp from '@mui/icons-material/ExitToApp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import MemoPerson from './Person';
-import MemoArrowDown from './ArrowDown';
-import MemoExit from './Exit';
+import MemoPerson from './icons/Person';
+import MemoArrowDown from './icons/ArrowDown';
+import MemoExit from './icons/Exit';
 
 interface IProps {
   user: IUser;

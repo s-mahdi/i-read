@@ -1,7 +1,7 @@
 import React from 'react';
-import VerseIcon from './VerseIcon';
+import VerseIcon from './icons/VerseIcon';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import MemoVerified from './Verified';
+import MemoVerified from './icons/Verified';
 
 interface IProps {
   date: Date;

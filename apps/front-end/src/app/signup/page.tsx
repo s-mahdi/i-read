@@ -2,7 +2,7 @@
 
 import { ISignUpEmployeeFormParams } from '@/@types/ISignUpEmployeeFormParams';
 import { Input } from '@/components';
-import MemoLogo from '@/components/Logo';
+import MemoLogo from '@/components/icons/Logo';
 import { useSignUpAPI } from '@/state/useSignUpAPI';
 import { useSignUpEmployeeAPI } from '@/state/useSignUpEmployeeAPI';
 import { Alert, Button, CircularProgress, Snackbar } from '@mui/material';

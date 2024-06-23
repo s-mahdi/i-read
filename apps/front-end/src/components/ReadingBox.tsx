@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import VerseIcon from './VerseIcon';
+import VerseIcon from './icons/VerseIcon';
 import { toIndiaDigits } from '@/function/toIndiaDigits';
 import PlayIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-import MemoPause from './Pause';
-import MemoPlay from './Play';
+import MemoPause from './icons/Pause';
+import MemoPlay from './icons/Play';
 
 interface IVerse {
   text: string;
