@@ -1,37 +1,33 @@
 'use client';
 
 import { Input } from '@/components';
+import Button from '@/components/Button';
 import MemoLogo from '@/components/icons/Logo';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Alert from '@/components/Alert';
 import { api } from '@/httpClient/api';
+import Link from 'next/link';
 
 interface IForm {
   username: string;
   password: string;
 }
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
 export default function Index() {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
+  const [isIntranet, setIsIntranet] = useState<boolean>(false);
   const {
     handleSubmit,
     formState: { errors },
     control,
   } = useForm<IForm>();
 
-  const isIntranet = process.env.NEXT_PUBLIC_IS_INTRANET_MODE === 'true';
+  useEffect(() => {
+    setIsIntranet(process.env.NEXT_PUBLIC_IS_INTRANET_MODE === 'true');
+  }, []);
 
   const onSubmit = async ({ username, password }: IForm) => {
     try {
@@ -41,23 +37,11 @@ export default function Index() {
     } catch (e: any) {
       console.error(e);
       setErrorMessage(e?.response?.data?.message);
-      setOpen(true);
     }
   };
 
-  const onSignUpClick = () => {
-    router.push('/signup');
-  };
-
-  const onForgotPasswordClick = () => {
-    router.push('/forget-password');
-  };
-
-  const handleClose = (_?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
+  const handleClose = () => {
+    setErrorMessage(null);
   };
 
   return (
@@ -83,66 +67,58 @@ export default function Index() {
             <p className="text-neutral-500">قرائت روزانه ۵۰ آیه از قرآن کریم</p>
           </div>
           <form
-            className="flex flex-col space-y-6"
+            className="flex flex-col space-y-4"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div>
-              <Controller
-                name="username"
-                control={control}
-                rules={{
-                  required: isIntranet
-                    ? 'شماره پرسنلی الزامی است'
-                    : 'نام کاربری',
-                }}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    placeholder={
-                      isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'
-                    }
-                  />
-                )}
-              />
-              {errors.username && (
-                <p className="text-red-500">{errors.username.message}</p>
+            <Controller
+              name="username"
+              control={control}
+              rules={{
+                required: isIntranet ? 'شماره پرسنلی الزامی است' : 'نام کاربری',
+              }}
+              render={({ field }) => (
+                <Input
+                  field={field}
+                  placeholder={isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'}
+                  error={errors.username?.message}
+                />
               )}
-            </div>
-            <div>
+            />
+
+            <div className="flex flex-col">
               <Controller
                 name="password"
                 control={control}
                 rules={{ required: 'کلمه عبور الزامی است' }}
                 render={({ field }) => (
-                  <Input {...field} placeholder="کلمه عبور" type="password" />
+                  <Input
+                    field={field}
+                    placeholder="کلمه عبور"
+                    type="password"
+                    error={errors.password?.message}
+                  />
                 )}
               />
-              {errors.password && (
-                <p className="text-red-500">{errors.password.message}</p>
-              )}
-              <button
-                type="button"
-                onClick={onForgotPasswordClick}
-                className="text-primary bg-inherit hover:underline w-full text-left text-sm"
+              <Link
+                href="/forget-password"
+                className="text-primary bg-inherit hover:underline w-full text-left text-sm mt-1"
               >
                 کلمه عبور خود را فراموش کرده اید؟
-              </button>
+              </Link>
             </div>
-            <button
-              type="submit"
-              className="bg-primary w-full h-12 rounded-lg text-white"
-            >
+
+            <Button type="submit" className="w-full h-12 mt-2 rounded-lg">
               ورود
-            </button>
+            </Button>
+
             <p className="text-center font-light">
               هنوز عضو نیستید؟{' '}
-              <button
-                type="button"
-                onClick={onSignUpClick}
-                className="text-primary bg-inherit hover:underline hover"
+              <Link
+                href="/signup"
+                className="text-primary bg-inherit hover:underline"
               >
                 ثبت نام کنید
-              </button>
+              </Link>
             </p>
           </form>
         </div>
@@ -153,11 +129,7 @@ export default function Index() {
           </p>
         </div>
       </div>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {errorMessage}
-        </Alert>
-      </Snackbar>
+      <Alert message={errorMessage} onClose={handleClose} />
     </div>
   );
 }

@@ -1,8 +1,12 @@
 import React from 'react';
+import { ControllerRenderProps } from 'react-hook-form';
 
-export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({
-  ...props
-}) => {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  field: ControllerRenderProps<any, any>;
+  error?: string;
+}
+
+export const Input: React.FC<InputProps> = ({ field, error, ...props }) => {
   const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     const englishNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -32,16 +36,20 @@ export const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({
     }
 
     e.target.value = filteredValue;
-    props.onChange && props.onChange(e);
+    field.onChange(e);
   };
 
   return (
-    <input
-      dir="rtl"
-      className={`w-full h-12 border-solid border rounded-lg border-slate-300 px-2 text-black ${props.className}`}
-      {...props}
-      type={props.type === 'number' ? 'text' : props.type}
-      onInput={props.type === 'number' ? handleNumberInput : props.onInput}
-    />
+    <div>
+      <input
+        dir="rtl"
+        className={`w-full h-12 border-solid border rounded-lg border-slate-300 px-2 text-black ${props.className}`}
+        {...field}
+        {...props}
+        type={props.type === 'number' ? 'text' : props.type}
+        onInput={props.type === 'number' ? handleNumberInput : props.onInput}
+      />
+      {error && <p className="text-red-500 mt-1">{error}</p>}
+    </div>
   );
 };

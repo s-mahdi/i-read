@@ -28,11 +28,21 @@ const config: Config = {
       },
       animation: {
         spin: 'spin 1s linear infinite',
+        'slide-in': 'slide-in 0.5s ease-out',
+        'slide-out': 'slide-out 0.5s ease-in',
       },
       keyframes: {
         spin: {
           '0%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(360deg)' },
+        },
+        'slide-in': {
+          '0%': { opacity: '0', transform: 'translateY(100%)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'slide-out': {
+          '0%': { opacity: '1', transform: 'translateY(0)' },
+          '100%': { opacity: '0', transform: 'translateY(100%)' },
         },
       },
     },

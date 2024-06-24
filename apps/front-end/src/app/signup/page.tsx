@@ -1,20 +1,20 @@
 'use client';
 
-import { ISignUpEmployeeFormParams } from '@/@types/ISignUpEmployeeFormParams';
-import { Input } from '@/components';
-import MemoLogo from '@/components/icons/Logo';
-import { useSignUpAPI } from '@/state/useSignUpAPI';
-import { useSignUpEmployeeAPI } from '@/state/useSignUpEmployeeAPI';
-import { Alert, Button, CircularProgress, Snackbar } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { useForm, Controller } from 'react-hook-form';
+import { ISignUpEmployeeFormParams } from '@/@types/ISignUpEmployeeFormParams';
+import MemoLogo from '@/components/icons/Logo';
+import { Input } from '@/components';
+import Alert from '@/components/Alert';
+import Button from '@/components/Button';
+import { api } from '@/httpClient/api';
+import Link from 'next/link';
 
 export default function SignUpPage() {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const [alertKey, setAlertKey] = useState<number>(0);
   const isIntranet = process.env.NEXT_PUBLIC_IS_INTRANET_MODE === 'true';
 
   const {
@@ -23,36 +23,28 @@ export default function SignUpPage() {
     control,
   } = useForm<ISignUpEmployeeFormParams>();
 
-  const { mutateAsync: signUpUser, isPending: isUserSignUpPending } =
-    useSignUpAPI();
-  const { mutateAsync: signUpEmployee, isPending: isEmployeeSignUpPending } =
-    useSignUpEmployeeAPI();
-  const isPending = isEmployeeSignUpPending || isUserSignUpPending;
+  const [isPending, setIsPending] = useState(false);
 
   const onSubmit = async (variables: ISignUpEmployeeFormParams) => {
+    setIsPending(true);
     try {
       const { data } = isIntranet
-        ? await signUpEmployee(variables)
-        : await signUpUser(variables);
+        ? await api.auth.signUpEmployee(variables)
+        : await api.auth.signUp(variables);
 
       localStorage.setItem('jwtToken', data.access_token);
       router.replace('/');
     } catch (e: any) {
       setErrorMessage(e?.response?.data?.message);
-      setOpen(true);
+      setAlertKey((prevKey) => prevKey + 1);
       console.error(e);
+    } finally {
+      setIsPending(false);
     }
   };
 
-  const onLoginClick = () => {
-    router.push('/login');
-  };
-
-  const handleClose = (_?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
+  const handleClose = () => {
+    setErrorMessage(null);
   };
 
   return (
@@ -72,129 +64,111 @@ export default function SignUpPage() {
           <h2 className="font-bold">ثبت نام</h2>
 
           <form
-            className="flex flex-col space-y-6"
+            className="flex flex-col space-y-4"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div>
-              <Controller
-                name="name"
-                control={control}
-                rules={{ required: 'نام الزامی است' }}
-                render={({ field }) => <Input {...field} placeholder="نام" />}
-              />
-              {errors.name && (
-                <p className="text-red-500">{errors.name.message}</p>
+            <Controller
+              name="name"
+              control={control}
+              rules={{ required: 'نام الزامی است' }}
+              render={({ field }) => (
+                <Input
+                  field={field}
+                  placeholder="نام"
+                  error={errors.name?.message}
+                />
               )}
-            </div>
-            <div>
-              <Controller
-                name="lastName"
-                control={control}
-                rules={{ required: 'نام خانوادگی الزامی است' }}
-                render={({ field }) => (
-                  <Input {...field} placeholder="نام خانوادگی" />
-                )}
-              />
-              {errors.lastName && (
-                <p className="text-red-500">{errors.lastName.message}</p>
+            />
+            <Controller
+              name="lastName"
+              control={control}
+              rules={{ required: 'نام خانوادگی الزامی است' }}
+              render={({ field }) => (
+                <Input
+                  field={field}
+                  placeholder="نام خانوادگی"
+                  error={errors.lastName?.message}
+                />
               )}
-            </div>
-            <div>
+            />
+            <Controller
+              name="username"
+              control={control}
+              rules={{
+                required: isIntranet
+                  ? 'شماره پرسنلی الزامی است'
+                  : 'شماره تلفن همراه الزامی است',
+              }}
+              render={({ field }) => (
+                <Input
+                  field={field}
+                  type="number"
+                  placeholder={isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'}
+                  error={errors.username?.message}
+                />
+              )}
+            />
+            <Controller
+              name="nationalCode"
+              control={control}
+              rules={{ required: 'کد ملی الزامی است.' }}
+              render={({ field }) => (
+                <Input
+                  field={field}
+                  type="number"
+                  placeholder="کد ملی"
+                  error={errors.nationalCode?.message}
+                />
+              )}
+            />
+            {isIntranet && (
               <Controller
-                name="username"
+                name="rank"
                 control={control}
-                rules={{
-                  required: isIntranet
-                    ? 'شماره پرسنلی الزامی است'
-                    : 'شماره تلفن همراه الزامی است',
-                }}
+                rules={{ required: 'درجه الزامی است' }}
                 render={({ field }) => (
                   <Input
-                    {...field}
-                    type="number"
-                    placeholder={
-                      isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'
-                    }
+                    field={field}
+                    placeholder="درجه"
+                    error={errors.rank?.message}
                   />
                 )}
               />
-              {errors.username && (
-                <p className="text-red-500">{errors.username.message}</p>
-              )}
-            </div>
-
-            <div>
-              <Controller
-                name="nationalCode"
-                control={control}
-                rules={{ required: 'کد ملی الزامی است.' }}
-                render={({ field }) => (
-                  <Input {...field} type="number" placeholder="کد ملی" />
-                )}
-              />
-              {errors.nationalCode && (
-                <p className="text-red-500">{errors.nationalCode.message}</p>
-              )}
-            </div>
-
-            {isIntranet && (
-              <div>
-                <Controller
-                  name="rank"
-                  control={control}
-                  rules={{ required: 'درجه الزامی است' }}
-                  render={({ field }) => (
-                    <Input {...field} placeholder="درجه" />
-                  )}
-                />
-                {errors.rank && (
-                  <p className="text-red-500">{errors.rank.message}</p>
-                )}
-              </div>
             )}
-            <div>
-              <Controller
-                name="password"
-                control={control}
-                rules={{ required: 'کلمه عبور الزامی است' }}
-                render={({ field }) => (
-                  <Input {...field} placeholder="کلمه عبور" type="password" />
-                )}
-              />
-              {errors.password && (
-                <p className="text-red-500">{errors.password.message}</p>
+            <Controller
+              name="password"
+              control={control}
+              rules={{ required: 'کلمه عبور الزامی است' }}
+              render={({ field }) => (
+                <Input
+                  field={field}
+                  placeholder="کلمه عبور"
+                  type="password"
+                  error={errors.password?.message}
+                />
               )}
-            </div>
+            />
             <Button
               type="submit"
-              className="bg-primary w-full h-12 rounded-lg text-white"
+              className="w-full h-12 rounded-lg"
               disabled={isPending}
             >
-              {isPending ? (
-                <CircularProgress sx={{ color: 'white' }} />
-              ) : (
-                'ثبت نام'
-              )}
+              {isPending ? '...' : 'ثبت نام'}
             </Button>
             <p className="text-center font-light">
-              عضو هستید؟{' '}
-              <Button
-                disabled={isPending}
-                type="button"
-                onClick={onLoginClick}
-                className="text-primary bg-inherit hover:underline hover"
+              عضو هستید؟
+              <Link
+                href={isPending ? '' : '/login'}
+                className="text-primary bg-inherit hover:underline"
               >
                 وارد شوید
-              </Button>
+              </Link>
             </p>
           </form>
         </div>
       </div>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {errorMessage}
-        </Alert>
-      </Snackbar>
+
+      <Alert key={alertKey} message={errorMessage} onClose={handleClose} />
     </div>
   );
 }
