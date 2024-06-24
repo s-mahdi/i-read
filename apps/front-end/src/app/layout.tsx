@@ -3,7 +3,6 @@ import 'regenerator-runtime/runtime';
 import type { Metadata } from 'next';
 import localFont from '@next/font/local';
 import './global.css';
-import ReactQueryProvider from '@/state/ReactQueryProvider';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -117,16 +116,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ReactQueryProvider>
-        <body className={`${yekan.variable} ${taha.variable} font-sans`}>
-          <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              {children}
-            </ThemeProvider>
-          </AppRouterCacheProvider>
-        </body>
-      </ReactQueryProvider>
+      <body className={`${yekan.variable} ${taha.variable} font-sans`}>
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {children}
+          </ThemeProvider>
+        </AppRouterCacheProvider>
+      </body>
     </html>
   );
 }

@@ -10,5 +10,4 @@ module.exports = withPWA({
     emotion: true,
     removeConsole: true,
   },
-  transpilePackages: ['@tanstack/react-query', '@tanstack/query-core'],
 });
