@@ -9,6 +9,7 @@ import { Controller, useForm } from 'react-hook-form';
 import Alert from '@/components/Alert';
 import { api } from '@/httpClient/api';
 import Link from 'next/link';
+import AuthLayout from '@/components/AuthLayout';
 
 interface IForm {
   username: string;
@@ -45,91 +46,80 @@ export default function Index() {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="hidden md:flex flex-col w-1/2 bg-primary px-20 py-40 bg-[linear-gradient(to_left,#32B7C5,rgba(0,0,0,0)),url('/login-bg.png')] bg-cover">
-        <div className="flex items-center gap-x-2">
-          <MemoLogo fontSize={120} />
-          <h1 className="text-white">من قرآن می‌خوانم</h1>
+    <AuthLayout>
+      <div className="space-y-4">
+        <div className="flex flex-col md:hidden justify-center items-center py-8 space-y-2">
+          <MemoLogo fontSize={120} primary />
+          <h1 className="text-primary">من قرآن می‌خوانم</h1>
         </div>
-        <p className="mt-auto text-white">
+        <div>
+          <h2 className="font-bold">خوش آمدید</h2>
+          <p className="text-neutral-500">قرائت روزانه ۵۰ آیه از قرآن کریم</p>
+        </div>
+        <form
+          className="flex flex-col space-y-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Controller
+            name="username"
+            control={control}
+            rules={{
+              required: isIntranet ? 'شماره پرسنلی الزامی است' : 'نام کاربری',
+            }}
+            render={({ field }) => (
+              <Input
+                field={field}
+                placeholder={isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'}
+                error={errors.username?.message}
+              />
+            )}
+          />
+
+          <div className="flex flex-col">
+            <Controller
+              name="password"
+              control={control}
+              rules={{ required: 'کلمه عبور الزامی است' }}
+              render={({ field }) => (
+                <Input
+                  field={field}
+                  placeholder="کلمه عبور"
+                  type="password"
+                  error={errors.password?.message}
+                />
+              )}
+            />
+            <Link
+              href="/forget-password"
+              className="text-primary bg-inherit hover:underline w-full text-left text-sm mt-1"
+            >
+              کلمه عبور خود را فراموش کرده اید؟
+            </Link>
+          </div>
+
+          <Button type="submit" className="w-full h-12 mt-2 rounded-lg">
+            ورود
+          </Button>
+
+          <p className="text-center font-light">
+            هنوز عضو نیستید؟{' '}
+            <Link
+              href="/signup"
+              className="text-primary bg-inherit hover:underline"
+            >
+              ثبت نام کنید
+            </Link>
+          </p>
+        </form>
+      </div>
+
+      <div className="block md:hidden mt-auto">
+        <p className="text-center font-thin text-sm">
           سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
         </p>
       </div>
 
-      <div className="w-96 p-4 mx-auto md:my-auto flex flex-col">
-        <div className="space-y-4">
-          <div className="flex flex-col md:hidden justify-center items-center py-8 space-y-2">
-            <MemoLogo fontSize={120} primary />
-            <h1 className="text-primary">من قرآن می‌خوانم</h1>
-          </div>
-          <div>
-            <h2 className="font-bold">خوش آمدید</h2>
-            <p className="text-neutral-500">قرائت روزانه ۵۰ آیه از قرآن کریم</p>
-          </div>
-          <form
-            className="flex flex-col space-y-4"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <Controller
-              name="username"
-              control={control}
-              rules={{
-                required: isIntranet ? 'شماره پرسنلی الزامی است' : 'نام کاربری',
-              }}
-              render={({ field }) => (
-                <Input
-                  field={field}
-                  placeholder={isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'}
-                  error={errors.username?.message}
-                />
-              )}
-            />
-
-            <div className="flex flex-col">
-              <Controller
-                name="password"
-                control={control}
-                rules={{ required: 'کلمه عبور الزامی است' }}
-                render={({ field }) => (
-                  <Input
-                    field={field}
-                    placeholder="کلمه عبور"
-                    type="password"
-                    error={errors.password?.message}
-                  />
-                )}
-              />
-              <Link
-                href="/forget-password"
-                className="text-primary bg-inherit hover:underline w-full text-left text-sm mt-1"
-              >
-                کلمه عبور خود را فراموش کرده اید؟
-              </Link>
-            </div>
-
-            <Button type="submit" className="w-full h-12 mt-2 rounded-lg">
-              ورود
-            </Button>
-
-            <p className="text-center font-light">
-              هنوز عضو نیستید؟{' '}
-              <Link
-                href="/signup"
-                className="text-primary bg-inherit hover:underline"
-              >
-                ثبت نام کنید
-              </Link>
-            </p>
-          </form>
-        </div>
-
-        <div className="block md:hidden mt-auto">
-          <p className="text-center font-thin text-sm">
-            سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
-          </p>
-        </div>
-      </div>
       <Alert message={errorMessage} onClose={handleClose} />
-    </div>
+    </AuthLayout>
   );
 }

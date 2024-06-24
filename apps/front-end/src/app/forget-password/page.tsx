@@ -10,6 +10,7 @@ import { Controller, useForm } from 'react-hook-form';
 import Alert from '@/components/Alert';
 import { api } from '@/httpClient/api';
 import Link from 'next/link';
+import AuthLayout from '@/components/AuthLayout';
 
 export default function Index() {
   const router = useRouter();
@@ -45,85 +46,74 @@ export default function Index() {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="hidden md:flex flex-col w-1/2 bg-primary px-20 py-40 bg-[linear-gradient(to_left,#32B7C5,rgba(0,0,0,0)),url('/login-bg.png')] bg-cover">
-        <div className="flex items-center gap-x-2">
-          <MemoLogo fontSize={120} />
-          <h1 className="text-white">من قرآن می‌خوانم</h1>
+    <AuthLayout>
+      <div className="space-y-4">
+        <div className="flex flex-col md:hidden justify-center items-center py-8 space-y-2">
+          <MemoLogo fontSize={120} primary />
+          <h1 className="text-primary">من قرآن می‌خوانم</h1>
         </div>
-        <p className="mt-auto text-white">
-          سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
-        </p>
+        <div>
+          <h2 className="font-bold">بازیابی کلمه عبور</h2>
+        </div>
+        <form
+          className="flex flex-col space-y-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Controller
+            name="username"
+            control={control}
+            rules={{
+              required: isIntranet
+                ? 'شماره پرسنلی الزامی است'
+                : 'شماره تلفن همراه الزامی است',
+            }}
+            render={({ field }) => (
+              <Input
+                field={field}
+                placeholder={isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'}
+                error={errors.username?.message}
+              />
+            )}
+          />
+          <Controller
+            name="nationalCode"
+            control={control}
+            rules={{ required: 'کد ملی الزامی است' }}
+            render={({ field }) => (
+              <Input
+                field={field}
+                type="number"
+                placeholder="کد ملی"
+                error={errors.nationalCode?.message}
+              />
+            )}
+          />
+          <Controller
+            name="newPassword"
+            control={control}
+            rules={{ required: 'کلمه عبور جدید الزامی است' }}
+            render={({ field }) => (
+              <Input
+                field={field}
+                type="password"
+                placeholder="کلمه عبور جدید"
+                error={errors.newPassword?.message}
+              />
+            )}
+          />
+          <Button type="submit" className="w-full h-12 mt-2 rounded-lg">
+            تغییر کلمه عبور
+          </Button>
+          <Link
+            href="/login"
+            className="text-primary bg-inherit hover:underline w-full text-center mt-4"
+          >
+            بازگشت به صفحه ورود
+          </Link>
+        </form>
       </div>
 
-      <div className="w-96 p-4 mx-auto my-auto flex flex-col">
-        <div className="space-y-4">
-          <div className="flex flex-col md:hidden justify-center items-center py-8 space-y-2">
-            <MemoLogo fontSize={120} primary />
-            <h1 className="text-primary">من قرآن می‌خوانم</h1>
-          </div>
-          <div>
-            <h2 className="font-bold">بازیابی کلمه عبور</h2>
-          </div>
-          <form
-            className="flex flex-col space-y-4"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <Controller
-              name="username"
-              control={control}
-              rules={{
-                required: isIntranet
-                  ? 'شماره پرسنلی الزامی است'
-                  : 'شماره تلفن همراه الزامی است',
-              }}
-              render={({ field }) => (
-                <Input
-                  field={field}
-                  placeholder={isIntranet ? 'شماره پرسنلی' : 'شماره تلفن همراه'}
-                  error={errors.username?.message}
-                />
-              )}
-            />
-            <Controller
-              name="nationalCode"
-              control={control}
-              rules={{ required: 'کد ملی الزامی است' }}
-              render={({ field }) => (
-                <Input
-                  field={field}
-                  type="number"
-                  placeholder="کد ملی"
-                  error={errors.nationalCode?.message}
-                />
-              )}
-            />
-            <Controller
-              name="newPassword"
-              control={control}
-              rules={{ required: 'کلمه عبور جدید الزامی است' }}
-              render={({ field }) => (
-                <Input
-                  field={field}
-                  type="password"
-                  placeholder="کلمه عبور جدید"
-                  error={errors.newPassword?.message}
-                />
-              )}
-            />
-            <Button type="submit" className="w-full h-12 mt-2 rounded-lg">
-              تغییر کلمه عبور
-            </Button>
-            <Link
-              href="/login"
-              className="text-primary bg-inherit hover:underline w-full text-center mt-4"
-            >
-              بازگشت به صفحه ورود
-            </Link>
-          </form>
-        </div>
-      </div>
       <Alert message={errorMessage} onClose={handleClose} />
-    </div>
+    </AuthLayout>
   );
 }

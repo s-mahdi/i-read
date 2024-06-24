@@ -1,9 +1,9 @@
-import MemoLogo from '@/components/icons/Logo';
-import React, { ReactNode } from 'react';
+import React from 'react';
+import MemoLogo from './icons/Logo';
 
-export const AuthLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
+const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="flex mx-auto h-screen">
+    <div className="flex h-screen">
       <div className="hidden md:flex flex-col w-1/2 bg-primary px-20 py-40 bg-[linear-gradient(to_left,#32B7C5,rgba(0,0,0,0)),url('/login-bg.png')] bg-cover">
         <div className="flex items-center gap-x-2">
           <MemoLogo fontSize={120} />
@@ -13,7 +13,11 @@ export const AuthLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
           سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
         </p>
       </div>
-      {children}
+      <div className="w-96 p-4 mx-auto md:my-auto flex flex-col">
+        {children}
+      </div>
     </div>
   );
 };
+
+export default AuthLayout;
