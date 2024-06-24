@@ -1,19 +1,27 @@
+import { useEffect, useState } from 'react';
 import { IUser } from '@/@types/Iuser';
 import { api } from '@/httpClient/api';
-import { DefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 
-export const GET_PROFILE_QUERY_KEY = 'GET_PROFILE_QUERY_KEY';
-type TData = AxiosResponse<IUser | undefined>;
-type TError = AxiosError<any>;
-type Options = Omit<
-  DefinedInitialDataOptions<TData, TError>,
-  'queryKey' | 'queryFn'
->;
+export const useProfileAPI = () => {
+  const [data, setData] = useState<AxiosResponse<IUser>>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<AxiosError>();
 
-export const useProfileAPI = (options?: Options) =>
-  useQuery<TData, TError>({
-    queryKey: [GET_PROFILE_QUERY_KEY],
-    queryFn: async () => api.user.getProfile(),
-    ...options,
-  });
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const res = await api.user.getProfile();
+        setData(res);
+      } catch (err: any) {
+        setError(err?.response);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
+
+  return { data, isLoading: loading, error };
+};

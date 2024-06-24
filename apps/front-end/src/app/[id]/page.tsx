@@ -5,11 +5,11 @@ import { Navbar } from '@/components/Navbar';
 import { ReadingBox } from '@/components/ReadingBox';
 import { LoaderLayout } from '@/layouts/LoaderLayout';
 import { useProfileAPI } from '@/state/useProfile';
-import { useFinishScheduleAPI } from '@/state/useFinishScheduleAPI';
 import { useVersesAPI } from '@/state/useVersesAPI';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { NavbarActions } from './navbarActions';
+import { api } from '@/httpClient/api';
 
 const QuranPage = ({ params }: any) => {
   const {
@@ -17,7 +17,6 @@ const QuranPage = ({ params }: any) => {
     isLoading: isProfileLoading,
     error,
   } = useProfileAPI();
-  const { mutateAsync: finishSchedule } = useFinishScheduleAPI();
   const { data: versesData, isLoading: isVersesLoading } = useVersesAPI(
     params.id
   );
@@ -74,7 +73,7 @@ const QuranPage = ({ params }: any) => {
 
   const onFinishClick = async () => {
     try {
-      await finishSchedule(Number(params.id));
+      await api.schedule.finishSchedule(Number(params.id));
       router.push('/');
     } catch (e) {
       console.error(e);
