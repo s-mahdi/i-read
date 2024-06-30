@@ -26,11 +26,11 @@ const QuranPage = ({ params }: any) => {
 
   useEffect(() => {
     const jwtToken = localStorage.getItem('jwtToken');
-    if (!jwtToken || error?.response?.status === 401) {
+    if (!jwtToken || error?.status === 401) {
       localStorage.clear();
       router.push('/login');
     }
-  }, [error?.response?.status, router]);
+  }, [error?.status, router]);
 
   if (
     !profileData?.data ||
