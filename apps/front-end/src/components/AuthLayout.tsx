@@ -13,9 +13,7 @@ const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           سازمان عقیدتی سیاسی فرماندهی انتظامی جمهوری اسلامی ایران
         </p>
       </div>
-      <div className="w-96 p-4 mx-auto md:my-auto flex flex-col">
-        {children}
-      </div>
+      {children}
     </div>
   );
 };
