@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import VerseIcon from './icons/VerseIcon';
 import { toIndiaDigits } from '@/function/toIndiaDigits';
-import PlayIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
 import MemoPause from './icons/Pause';
 import MemoPlay from './icons/Play';
 
@@ -19,6 +17,8 @@ interface IProps {
   playingIndex: number | null;
   handlePlay: (index: number) => void;
   handleAudioEnded: (index: number) => void;
+  audioRefs: React.MutableRefObject<{ [key: string]: HTMLAudioElement | null }>;
+  suraIndex: number;
 }
 
 export const ReadingBox = ({
@@ -27,28 +27,34 @@ export const ReadingBox = ({
   playingIndex,
   handlePlay,
   handleAudioEnded,
+  audioRefs,
+  suraIndex,
 }: IProps) => {
-  const audioRefs = useRef<HTMLAudioElement[]>([]);
   const verseRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     if (playingIndex !== null) {
-      audioRefs.current[playingIndex]?.play();
-      verseRefs.current[playingIndex]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
+      const audioKey = `${suraIndex}-${playingIndex}`;
+      const currentAudio = audioRefs.current[audioKey];
+      const currentVerse = verseRefs.current[playingIndex];
+      if (currentAudio) {
+        currentAudio.play();
+      }
+      if (currentVerse) {
+        currentVerse.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    } else {
+      Object.values(audioRefs.current).forEach((audio) => {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
       });
     }
-    audioRefs.current.forEach((audio, index) => {
-      if (!audio) return;
-      if (index === playingIndex) {
-        audio.play();
-      } else {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-    });
-  }, [playingIndex]);
+  }, [playingIndex, suraIndex, audioRefs]);
 
   return (
     <div className="shadow-xl rounded-2xl overflow-hidden">
@@ -72,7 +78,7 @@ export const ReadingBox = ({
           >
             <audio
               ref={(el) => {
-                audioRefs.current[index] = el!;
+                audioRefs.current[`${suraIndex}-${index}`] = el;
               }}
               src={audioUrl}
               crossOrigin="anonymous"
