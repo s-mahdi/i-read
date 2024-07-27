@@ -74,7 +74,7 @@ const seedQuranDatabase = async () => {
     await verseRepository.clear();
 
     const basePath = join(__dirname, 'assets');
-    const originalFilePath = join(basePath, 'ara-quranuthmanienc.txt');
+    const originalFilePath = join(basePath, 'quran-uthmani.txt');
     const translationFilePath = join(basePath, 'fas-abdolmohammaday.txt');
 
     const originalLines = readFileLines(originalFilePath);
