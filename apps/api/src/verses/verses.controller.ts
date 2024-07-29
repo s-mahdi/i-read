@@ -16,7 +16,7 @@ import { SchedulesService } from '../schedules/schedules.service';
 export class VersesController {
   constructor(
     private readonly versesService: VersesService,
-    private readonly schedulesService: SchedulesService
+    private readonly schedulesService: SchedulesService,
   ) {}
 
   @Get()
@@ -32,7 +32,7 @@ export class VersesController {
   @Get('by-schedule/:scheduleId')
   async findBySchedule(
     @Param('scheduleId') scheduleId: string,
-    @Query('pageSize') pageSize = 50
+    @Query('pageSize') pageSize = 50,
   ) {
     try {
       const schedule = await this.schedulesService.findOne(+scheduleId);
@@ -42,20 +42,45 @@ export class VersesController {
       const startVerseId = schedule.startVerseId;
       const verses = await this.versesService.findVersesByStartId(
         startVerseId,
-        Number(pageSize)
+        Number(pageSize),
       );
       if (!verses || verses.length === 0) {
         throw new NotFoundException(
-          `No verses found starting from verse id ${startVerseId}`
+          `No verses found starting from verse id ${startVerseId}`,
         );
       }
-      return verses;
+
+      const bismillahVerse = await this.versesService.findOne(1);
+      if (!bismillahVerse) {
+        throw new NotFoundException(`Bismillah verse not found`);
+      }
+      const BISMILLAH_TEXT = bismillahVerse.text;
+
+      verses[0].suraId;
+
+      return verses.reduce((acc, cur) => {
+        if (
+          cur.order === 1 &&
+          cur.text.startsWith(BISMILLAH_TEXT) &&
+          BISMILLAH_TEXT !== cur.text
+        ) {
+          acc.push({
+            ...bismillahVerse,
+            order: 0,
+            suraId: cur.suraId,
+            sura: cur.sura,
+            id: 0,
+          });
+        }
+        acc.push(cur);
+        return acc;
+      }, []);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       } else {
         throw new InternalServerErrorException(
-          'An unexpected error occurred while fetching verses'
+          'An unexpected error occurred while fetching verses',
         );
       }
     }

@@ -9,12 +9,12 @@ import { UpdateScheduleDto } from './dto/update-schedule.dto';
 export class SchedulesService {
   constructor(
     @InjectRepository(Schedule)
-    private readonly scheduleRepository: Repository<Schedule>
+    private readonly scheduleRepository: Repository<Schedule>,
   ) {}
 
   async create(
     createScheduleDto: CreateScheduleDto,
-    manager?: EntityManager
+    manager?: EntityManager,
   ): Promise<Schedule> {
     const schedule = this.scheduleRepository.create(createScheduleDto);
     if (manager) {
@@ -33,7 +33,7 @@ export class SchedulesService {
 
   async update(
     id: number,
-    updateScheduleDto: UpdateScheduleDto
+    updateScheduleDto: UpdateScheduleDto,
   ): Promise<Schedule> {
     await this.scheduleRepository.update(id, updateScheduleDto);
     return this.findOne(id);
