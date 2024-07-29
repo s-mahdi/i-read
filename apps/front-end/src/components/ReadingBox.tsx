@@ -56,8 +56,8 @@ export const ReadingBox = ({
           </p>
         )}
       </div>
-      <div className="flex flex-col bg-white bg-opacity-70 gap-y-8 p-8">
-        {verses.map(({ text, translation, order, suraId, id }, index) => {
+      <div className="flex flex-col bg-white bg-opacity-75 gap-y-8 p-8">
+        {verses.map(({ text, translation, order, suraId }, index) => {
           const isBismillah = text.startsWith(BISMILLAH);
           const verseText =
             isBismillah && text !== BISMILLAH
@@ -88,7 +88,7 @@ export const ReadingBox = ({
                   </div>
                 )}
                 <p
-                  className={`text-4xl font-taha ${
+                  className={`text-5xl font-taha ${
                     playingIndex &&
                     playingIndex.suraId === suraId &&
                     playingIndex.order === order
@@ -106,7 +106,10 @@ export const ReadingBox = ({
                   playingIndex.order === order
                     ? 'text-primary'
                     : 'text-gray-900'
-                }`}
+                }
+                text-lg
+                mt-2
+                `}
               >
                 {`${order !== 0 ? toIndiaDigits(order) : ''}. ${translation}`}
               </p>
