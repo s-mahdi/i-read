@@ -3,58 +3,46 @@ import VerseIcon from './icons/VerseIcon';
 import { toIndiaDigits } from '@/function/toIndiaDigits';
 import MemoPause from './icons/Pause';
 import MemoPlay from './icons/Play';
-
-interface IVerse {
-  text: string;
-  translation: string;
-  order: number;
-  audioUrl: string;
-}
+import { IVerse } from '@/@types/IVerse';
 
 interface IProps {
   sura: string;
   verses: IVerse[];
-  playingIndex: number | null;
-  handlePlay: (index: number) => void;
-  handleAudioEnded: (index: number) => void;
-  audioRefs: React.MutableRefObject<{ [key: string]: HTMLAudioElement | null }>;
-  suraIndex: number;
+  playingIndex: { suraId: number; order: number } | null;
+  handlePlay: (suraId: number, order: number) => void;
 }
+
+const BISMILLAH = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ';
 
 export const ReadingBox = ({
   sura,
   verses,
   playingIndex,
   handlePlay,
-  handleAudioEnded,
-  audioRefs,
-  suraIndex,
 }: IProps) => {
   const verseRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     if (playingIndex !== null) {
-      const audioKey = `${suraIndex}-${playingIndex}`;
-      const currentAudio = audioRefs.current[audioKey];
-      const currentVerse = verseRefs.current[playingIndex];
-      if (currentAudio) {
-        currentAudio.play();
-      }
-      if (currentVerse) {
-        currentVerse.scrollIntoView({
+      const currentVerseRef = verseRefs.current.find(
+        (ref, index) =>
+          ref !== null &&
+          verses[index]?.suraId === playingIndex.suraId &&
+          verses[index].order === playingIndex.order
+      );
+      if (currentVerseRef) {
+        currentVerseRef.scrollIntoView({
           behavior: 'smooth',
           block: 'center',
         });
       }
-    } else {
-      Object.values(audioRefs.current).forEach((audio) => {
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
-      });
     }
-  }, [playingIndex, suraIndex, audioRefs]);
+  }, [playingIndex, verses]);
+
+  const hasBismillah =
+    verses.length > 0 &&
+    verses[0]?.text.startsWith(BISMILLAH) &&
+    verses[0]?.text !== BISMILLAH;
 
   return (
     <div className="shadow-xl rounded-2xl overflow-hidden">
@@ -62,67 +50,86 @@ export const ReadingBox = ({
         <p className="font-semibold text-lg text-gray-800 text-center">
           {sura}
         </p>
+        {hasBismillah && (
+          <p className="text-center text-gray-800 font-taha text-2xl mt-2">
+            {BISMILLAH}
+          </p>
+        )}
       </div>
       <div className="flex flex-col bg-white bg-opacity-85 gap-y-8 p-8">
-        {verses.map(({ text, translation, order, audioUrl }, index) => (
-          <div
-            ref={(el) => {
-              verseRefs.current[index] = el;
-            }}
-            className={`flex flex-col gap-y-4 transition-all duration-500 ${
-              index === playingIndex
-                ? 'bg-primary-100 text-primary'
-                : 'text-gray-900'
-            }`}
-            key={index}
-          >
-            <audio
+        {verses.map(({ text, translation, order, suraId, id }, index) => {
+          const isBismillah = text.startsWith(BISMILLAH);
+          const verseText =
+            isBismillah && text !== BISMILLAH
+              ? text.replace(BISMILLAH, '').trim()
+              : text;
+
+          return (
+            <div
               ref={(el) => {
-                audioRefs.current[`${suraIndex}-${index}`] = el;
+                verseRefs.current[index] = el;
               }}
-              src={audioUrl}
-              crossOrigin="anonymous"
-              onEnded={() => handleAudioEnded(index)}
-            />
-            <div className="flex items-center gap-x-4">
-              <div className="relative w-fit">
-                <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm">
-                  {toIndiaDigits(order)}
-                </span>
-                <VerseIcon fontSize={40} />
+              className={`flex flex-col gap-y-4 transition-all duration-500 ${
+                playingIndex &&
+                playingIndex.suraId === suraId &&
+                playingIndex.order === order
+                  ? 'bg-primary-100 text-primary'
+                  : 'text-gray-900'
+              }`}
+              key={index}
+            >
+              <div className="flex items-center gap-x-4">
+                {order !== 0 && (
+                  <div className="relative w-fit">
+                    <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm">
+                      {toIndiaDigits(order)}
+                    </span>
+                    <VerseIcon fontSize={40} />
+                  </div>
+                )}
+                <p
+                  className={`text-4xl font-taha ${
+                    playingIndex &&
+                    playingIndex.suraId === suraId &&
+                    playingIndex.order === order
+                      ? 'text-primary'
+                      : 'text-gray-900'
+                  }`}
+                >
+                  {verseText}
+                </p>
               </div>
               <p
-                className={`text-4xl font-taha ${
-                  index === playingIndex ? 'text-primary' : 'text-gray-900'
+                className={`${
+                  playingIndex &&
+                  playingIndex.suraId === suraId &&
+                  playingIndex.order === order
+                    ? 'text-primary'
+                    : 'text-gray-900'
                 }`}
               >
-                {text}
+                {`${order !== 0 ? toIndiaDigits(order) : ''}. ${translation}`}
               </p>
-            </div>
-            <p
-              className={`${
-                index === playingIndex ? 'text-primary' : 'text-gray-900'
-              }`}
-            >
-              {`${toIndiaDigits(order)}. ${translation}`}
-            </p>
-            <div className="flex flex-row-reverse">
-              <div className="tooltip" data-tooltip="پخش">
-                <button
-                  onClick={() => handlePlay(index)}
-                  className="focus:outline-none"
-                >
-                  {playingIndex === index ? (
-                    <MemoPause fill="#32B7C5" fontSize="32" />
-                  ) : (
-                    <MemoPlay fill="#32B7C5" fontSize="32" />
-                  )}
-                </button>
+              <div className="flex flex-row-reverse">
+                <div className="tooltip" data-tooltip="پخش">
+                  <button
+                    onClick={() => handlePlay(suraId, order)}
+                    className="focus:outline-none"
+                  >
+                    {playingIndex &&
+                    playingIndex.suraId === suraId &&
+                    playingIndex.order === order ? (
+                      <MemoPause fill="#32B7C5" fontSize="32" />
+                    ) : (
+                      <MemoPlay fill="#32B7C5" fontSize="32" />
+                    )}
+                  </button>
+                </div>
               </div>
+              <hr className="border-[0.5px] border-gray-300 w-full mt-4" />
             </div>
-            <hr className="border-[0.5px] border-gray-300 w-full mt-4" />
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
