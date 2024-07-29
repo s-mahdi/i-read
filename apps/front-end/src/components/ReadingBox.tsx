@@ -56,7 +56,7 @@ export const ReadingBox = ({
           </p>
         )}
       </div>
-      <div className="flex flex-col bg-white bg-opacity-85 gap-y-8 p-8">
+      <div className="flex flex-col bg-white bg-opacity-70 gap-y-8 p-8">
         {verses.map(({ text, translation, order, suraId, id }, index) => {
           const isBismillah = text.startsWith(BISMILLAH);
           const verseText =
