@@ -4,7 +4,7 @@ import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { getNextNonHolidayDates } from '../utils/calendarUtils';
+import { getDates } from '../utils/calendarUtils';
 import { VersesService } from '../verses/verses.service';
 import { SchedulesService } from '../schedules/schedules.service';
 import { CreateScheduleDto } from '../schedules/dto/create-schedule.dto';
@@ -49,7 +49,7 @@ export class UserService {
     });
 
     const startDate = new Date();
-    const nonHolidayDates = await getNextNonHolidayDates(startDate, 125);
+    const nonHolidayDates = await getDates(startDate, 125);
 
     return this.dataSource.transaction(async (manager) => {
       const savedUser = await manager.save(user);

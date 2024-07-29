@@ -1,10 +1,6 @@
-// src/utils/calendarUtils.ts
-import moment from 'moment-jalaali';
-import { isHoliday } from 'shamsi-holidays';
-
-export async function getNextNonHolidayDates(
+export async function getDates(
   startDate: Date,
-  numDays: number
+  numDays: number,
 ): Promise<Date[]> {
   const dates: Date[] = [];
   let count = 0;
@@ -12,11 +8,8 @@ export async function getNextNonHolidayDates(
   while (dates.length < numDays) {
     const potentialDate = new Date(startDate.getTime());
     potentialDate.setDate(potentialDate.getDate() + count);
-    const jalaliDate = moment(potentialDate).format('jYYYY/jMM/jDD');
 
-    if (!(await isHoliday(jalaliDate))) {
-      dates.push(potentialDate);
-    }
+    dates.push(potentialDate);
     count++;
   }
 
