@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Schedule } from '../../schedules/entities/schedule.entity';
+import { Role } from './roles.enum';
 
 @Entity()
 export class User {
@@ -34,10 +35,10 @@ export class User {
 
   @Column({
     type: 'enum',
-    enum: ['admin', 'user', 'employee'],
-    default: 'user',
+    enum: Role,
+    default: Role.User,
   })
-  role: string;
+  role: Role;
 
   @CreateDateColumn()
   createdAt: Date;

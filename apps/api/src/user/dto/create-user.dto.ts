@@ -1,6 +1,13 @@
-import { IsString, IsNotEmpty, Matches } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  Matches,
+  IsEnum,
+  IsOptional,
+} from 'class-validator';
 import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
 import { IsValidPhoneNumber } from '../../decorators/isValidPhoneNumber.decorator';
+import { Role } from '../entities/roles.enum';
 
 const noFarsiRegEx =
   /^[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0600-\u06FF\u06F0-\u06F9]+$/;
@@ -28,4 +35,8 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'وارد کردن کد ملی الزامی است.' })
   @IsValidNationalCode({ message: 'کد ملی نامعتبر است.' })
   nationalCode: string;
+
+  @IsEnum(Role)
+  @IsOptional()
+  role?: Role;
 }
