@@ -6,6 +6,7 @@
   "workspaces": [
     "apps/api",
     "apps/front-end",
-    "apps/static-api"
+    "apps/static-api",
+    "apps/admin"
   ]
 }
