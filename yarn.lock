@@ -5672,6 +5672,15 @@ axios@^1.6.8:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
+axios@^1.7.3:
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.3.tgz#a1125f2faf702bc8e8f2104ec3a76fab40257d85"
+  integrity sha512-Ar7ND9pU99eJ9GpoGQKhKf58GpUOgnzuaB7ueNQ5BMi0p+LZ5oaEnfF999fAArcTIBwXTCHAmGcHOZJaWPq9Nw==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
 axobject-query@^3.1.1, axobject-query@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-3.2.1.tgz#39c378a6e3b06ca679f29138151e45b2b32da62a"
@@ -12317,6 +12326,11 @@ ra-language-english@^5.1.1:
   dependencies:
     ra-core "^5.1.1"
 
+ra-language-farsi@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/ra-language-farsi/-/ra-language-farsi-5.0.0.tgz#a5104f95bb4aa92a1f6ebfb7b4e4b09a4e078f2c"
+  integrity sha512-wdveom01mdPY3KiFBWj4cc1f1YhWWi4pqNIuY79jgbJ43Kk72qOQIr3byWipy/Nt7dYzrAP3IvXmylWLLMmgnw==
+
 ra-ui-materialui@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/ra-ui-materialui/-/ra-ui-materialui-5.1.1.tgz#1bfb86967290763f440da37760defdc56e47fde7"
@@ -12412,7 +12426,7 @@ react-hook-form@^7.51.4:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.51.5.tgz#4afbfb819312db9fea23e8237a3a0d097e128b43"
   integrity sha512-J2ILT5gWx1XUIJRETiA7M19iXHlG74+6O3KApzvqB/w8S5NQR7AbU8HVZrMALdmDgWpRPYiZJl0zx8Z4L2mP6Q==
 
-react-hook-form@^7.52.0:
+react-hook-form@^7.52.0, react-hook-form@^7.52.2:
   version "7.52.2"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.52.2.tgz#ff40f4776250b86ddfcde6be68d34aa82b1c60fe"
   integrity sha512-pqfPEbERnxxiNMPd0bzmt1tuaPcVccywFDpyk2uV5xCIBphHV5T8SVnX9/o3kplPE1zzKt77+YIoq+EMwJp56A==

@@ -1,108 +1,89 @@
-import { fetchUtils, DataProvider } from 'react-admin';
-import { stringify } from 'query-string';
-
-// Use the correct environment variable
-const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
-const httpClient = fetchUtils.fetchJson;
+import { axiosClient } from "./api/axiosClient";
+import { DataProvider } from "react-admin";
+import { stringify } from "query-string";
 
 const dataProvider: DataProvider = {
-    getList: async (resource, params) => {
-        const { page, perPage } = params.pagination;
-        const { field, order } = params.sort;
-        const query = {
-            sort: JSON.stringify([field, order]),
-            range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-            filter: JSON.stringify(params.filter),
-        };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
-        console.log(`GET LIST URL: ${url}`);
+  getList: async (resource, params) => {
+    const { page, perPage } = params.pagination;
+    const { field, order } = params.sort;
+    const query = {
+      sort: JSON.stringify([field, order]),
+      range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+      filter: JSON.stringify(params.filter),
+    };
+    const url = `/${resource}?${stringify(query)}`;
 
-        const { headers, json } = await httpClient(url);
-        return {
-            data: json,
-            total: json.length, // Adjust this according to your API's response structure
-        };
-    },
-    getOne: (resource, params) => {
-        const url = `${apiUrl}/${resource}/${params.id}`;
-        console.log(`GET ONE URL: ${url}`);
-        return httpClient(url).then(({ json }) => ({
-            data: json,
-        }));
-    },
-    getMany: (resource, params) => {
-        const query = {
-            filter: JSON.stringify({ id: params.ids }),
-        };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
-        console.log(`GET MANY URL: ${url}`);
-        return httpClient(url).then(({ json }) => ({ data: json }));
-    },
-    getManyReference: (resource, params) => {
-        const { page, perPage } = params.pagination;
-        const { field, order } = params.sort;
-        const query = {
-            sort: JSON.stringify([field, order]),
-            range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-            filter: JSON.stringify({
-                ...params.filter,
-                [params.target]: params.id,
-            }),
-        };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
-        console.log(`GET MANY REFERENCE URL: ${url}`);
+    const { data, headers } = await axiosClient.get(url);
+    return {
+      data,
+      total: data.length, // Adjust this according to your API's response structure
+    };
+  },
+  getOne: async (resource, params) => {
+    const url = `/${resource}/${params.id}`;
+    const { data } = await axiosClient.get(url);
+    return { data };
+  },
+  getMany: async (resource, params) => {
+    const query = {
+      filter: JSON.stringify({ id: params.ids }),
+    };
+    const url = `/${resource}?${stringify(query)}`;
+    const { data } = await axiosClient.get(url);
+    return { data };
+  },
+  getManyReference: async (resource, params) => {
+    const { page, perPage } = params.pagination;
+    const { field, order } = params.sort;
+    const query = {
+      sort: JSON.stringify([field, order]),
+      range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
+      filter: JSON.stringify({
+        ...params.filter,
+        [params.target]: params.id,
+      }),
+    };
+    const url = `/${resource}?${stringify(query)}`;
 
-        return httpClient(url).then(({ headers, json }) => ({
-            data: json,
-            total: json.length // Adjust this according to your API's response structure
-        }));
-    },
-    update: (resource, params) => {
-        const url = `${apiUrl}/${resource}/${params.id}`;
-        console.log(`UPDATE URL: ${url}`);
-        return httpClient(url, {
-            method: 'PATCH',
-            body: JSON.stringify(params.data),
-        }).then(({ json }) => ({ data: json }));
-    },
-    updateMany: (resource, params) => {
-        const query = {
-            filter: JSON.stringify({ id: params.ids }),
-        };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
-        console.log(`UPDATE MANY URL: ${url}`);
-        return httpClient(url, {
-            method: 'PATCH',
-            body: JSON.stringify(params.data),
-        }).then(({ json }) => ({ data: json }));
-    },
-    create: (resource, params) => {
-        const url = `${apiUrl}/${resource}`;
-        console.log(`CREATE URL: ${url}`);
-        return httpClient(url, {
-            method: 'POST',
-            body: JSON.stringify(params.data),
-        }).then(({ json }) => ({
-            data: { ...params.data, id: json.id },
-        }));
-    },
-    delete: (resource, params) => {
-        const url = `${apiUrl}/${resource}/${params.id}`;
-        console.log(`DELETE URL: ${url}`);
-        return httpClient(url, {
-            method: 'DELETE',
-        }).then(({ json }) => ({ data: json }));
-    },
-    deleteMany: (resource, params) => {
-        const query = {
-            filter: JSON.stringify({ id: params.ids }),
-        };
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
-        console.log(`DELETE MANY URL: ${url}`);
-        return httpClient(url, {
-            method: 'DELETE',
-        }).then(({ json }) => ({ data: json }));
-    },
+    const { data, headers } = await axiosClient.get(url);
+    return {
+      data,
+      total: data.length, // Adjust this according to your API's response structure
+    };
+  },
+  update: async (resource, params) => {
+    const url = `/${resource}/${params.id}`;
+    const { data } = await axiosClient.patch(url, params.data);
+    return { data };
+  },
+  updateMany: async (resource, params) => {
+    const query = {
+      filter: JSON.stringify({ id: params.ids }),
+    };
+    const url = `/${resource}?${stringify(query)}`;
+    const { data } = await axiosClient.patch(url, params.data);
+    return { data };
+  },
+  create: async (resource, params) => {
+    const url = `/${resource}`;
+    const { data } = await axiosClient.post(url, params.data);
+    return {
+      data: { ...params.data, id: data.id },
+    };
+  },
+  delete: async (resource, params) => {
+    const url = `/${resource}/${params.id}`;
+    const { data } = await axiosClient.delete(url);
+    return { data };
+  },
+  deleteMany: async (resource, params) => {
+    const query = {
+      filter: JSON.stringify({ id: params.ids }),
+    };
+    const url = `/${resource}?${stringify(query)}`;
+    const { data } = await axiosClient.delete(url);
+    return { data };
+  },
 };
 
 export default dataProvider;
