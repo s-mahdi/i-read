@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
 import { IsValidPhoneNumber } from '../../decorators/isValidPhoneNumber.decorator';
-import { Role } from '../entities/roles.enum';
+import { Role } from '../../@types/roles.enum';
 
 const noFarsiRegEx =
   /^[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u0600-\u06FF\u06F0-\u06F9]+$/;

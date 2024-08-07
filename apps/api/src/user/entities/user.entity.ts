@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Schedule } from '../../schedules/entities/schedule.entity';
-import { Role } from './roles.enum';
+import { Role } from '../../@types/roles.enum';
 
 @Entity()
 export class User {

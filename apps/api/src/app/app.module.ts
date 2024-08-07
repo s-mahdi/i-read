@@ -20,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { Schedule } from '../schedules/entities/schedule.entity';
 import { SchedulesModule } from '../schedules/schedules.module';
+import { RolesGuard } from '../auth/guards/role.guard';
 
 const serveStaticModule: DynamicModule[] =
   process.env.IS_INTRANET_MODE === 'true'
@@ -69,6 +70,10 @@ const serveStaticModule: DynamicModule[] =
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
