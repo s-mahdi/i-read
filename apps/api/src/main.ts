@@ -5,12 +5,11 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : '*';
   app.enableCors({
-    origin: [
-      process.env.HOST_ADDRESS,
-      process.env.HOST_ADDRESS_2,
-      process.env.HOST_ADDRESS_3,
-    ],
+    origin: allowedOrigins,
   });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);

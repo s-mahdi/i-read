@@ -17,6 +17,13 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
+  async validatePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return password === hashedPassword;
+  }
+
   async login(username: string, pass: string): Promise<any> {
     try {
       const user = await this.userService.findOneByUserName(username);
@@ -27,8 +34,47 @@ export class AuthService {
         );
       }
 
-      if (user.password !== pass) {
+      if (!(await this.validatePassword(pass, user.password))) {
         throw new UnauthorizedException('نام کاربری یا کلمه عبور صحیح نیست');
+      }
+
+      const payload = {
+        username: user.username,
+        sub: user.id,
+        role: user.role,
+      };
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
+    } catch (error) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof UnauthorizedException
+      ) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'مشکلی در سرور رخ داده است. لطفاً بعداً دوباره تلاش کنید.',
+      );
+    }
+  }
+
+  async adminLogin(username: string, pass: string): Promise<any> {
+    try {
+      const user = await this.userService.findOneByUserName(username);
+
+      if (!user) {
+        throw new NotFoundException(
+          'کاربر با این نام کاربری یافت نشد. لطفا ثبت‌نام کنید',
+        );
+      }
+
+      if (!(await this.validatePassword(pass, user.password))) {
+        throw new UnauthorizedException('نام کاربری یا کلمه عبور صحیح نیست');
+      }
+
+      if (user.role !== 'admin' && user.role !== 'superAdmin') {
+        throw new UnauthorizedException('Access denied');
       }
 
       const payload = {

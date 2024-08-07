@@ -16,6 +16,13 @@ export class AuthController {
     return this.authService.login(signInDto.username, signInDto.password);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Public()
+  @Post('admin/login')
+  adminLogin(@Body() signInDto: Record<string, any>) {
+    return this.authService.adminLogin(signInDto.username, signInDto.password);
+  }
+
   @HttpCode(HttpStatus.CREATED)
   @Public()
   @Post('signup')
