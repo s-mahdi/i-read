@@ -7,13 +7,14 @@ import rtlPlugin from "stylis-plugin-rtl";
 import { create } from "jss";
 import rtl from "jss-rtl";
 import { StylesProvider, jssPreset } from "@mui/styles";
-import farsiMessages from "ra-language-farsi";
 import polyglotI18nProvider from "ra-i18n-polyglot";
-import dataProvider from "./dataProvider";
+import dataProvider from "./dataProvider"; // Your custom dataProvider
 import authProvider from "./authProvider";
 import AdminLoginPage from "./components/AdminLoginPage";
 import { UserCreate, UserEdit, UserList } from "./components/users";
 import CustomLayout from "./components/CustomLayout";
+import farsiMessages from "./i18n/ra-langualge-farsi";
+import UserIcon from "@mui/icons-material/Group";
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl] });
 
@@ -52,6 +53,7 @@ const App = () => (
         >
           <Resource
             name="user"
+            icon={UserIcon}
             list={UserList}
             edit={UserEdit}
             create={UserCreate}
