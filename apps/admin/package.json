@@ -16,6 +16,7 @@
     "@mui/material": "^5.16.6",
     "@mui/styles": "^5.16.6",
     "axios": "^1.7.3",
+    "jalali-moment": "^3.3.11",
     "jss": "^10.10.0",
     "jss-rtl": "^0.3.0",
     "ra-data-simple-rest": "^5.1.1",

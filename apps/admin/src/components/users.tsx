@@ -3,61 +3,55 @@ import {
   List,
   Datagrid,
   TextField,
-  DateField,
   Edit,
   SimpleForm,
   TextInput,
-  SelectInput,
   Create,
+  SelectInput,
   useRecordContext,
 } from "react-admin";
+import JalaliDateField from "./JalaliDateField"; // Import custom date field
+import RoleField from "./RoleField"; // Import custom role field
 import { IUser } from "../@types/IUser";
+
+const ranks = [
+  { id: "سرباز دوم", name: "سرباز دوم" },
+  { id: "سرباز یکم", name: "سرباز یکم" },
+  { id: "سرجوخه", name: "سرجوخه" },
+  { id: "گروهبان سوم", name: "گروهبان سوم" },
+  { id: "گروهبان دوم", name: "گروهبان دوم" },
+  { id: "گروهبان یکم", name: "گروهبان یکم" },
+  { id: "استوار دوم", name: "استوار دوم" },
+  { id: "استوار یکم", name: "استوار یکم" },
+  { id: "ستوان سوم", name: "ستوان سوم" },
+  { id: "ستوان دوم", name: "ستوان دوم" },
+  { id: "ستوان یکم", name: "ستوان یکم" },
+  { id: "سروان", name: "سروان" },
+  { id: "سرگرد", name: "سرگرد" },
+  { id: "سرهنگ دوم", name: "سرهنگ دوم" },
+  { id: "سرهنگ", name: "سرهنگ" },
+  { id: "سرتیپ دوم", name: "سرتیپ دوم" },
+  { id: "سرتیپ", name: "سرتیپ" },
+  { id: "سرلشکر", name: "سرلشکر" },
+  { id: "سپهبد", name: "سپهبد" },
+  { id: "ارتشبد", name: "ارتشبد" },
+];
 
 const rtlInputStyle: React.CSSProperties = {
   direction: "rtl",
 };
 
-const roleChoices = [
-  { id: "superAdmin", name: "مدیر کل" },
-  { id: "admin", name: "مدیر" },
-  { id: "user", name: "کاربر" },
-  { id: "employee", name: "کارمند" },
-];
-
-const rankChoices = [
-  { id: "sarbaz_dovom", name: "سرباز دوم" },
-  { id: "sarbaz_yekom", name: "سرباز یکم" },
-  { id: "sarjooghe", name: "سرجوخه" },
-  { id: "goroobans_sevom", name: "گروهبان سوم" },
-  { id: "goroobans_dovom", name: "گروهبان دوم" },
-  { id: "goroobans_yekom", name: "گروهبان یکم" },
-  { id: "ostovar_dovom", name: "استوار دوم" },
-  { id: "ostovar_yekom", name: "استوار یکم" },
-  { id: "setvan_sevom", name: "ستوان سوم" },
-  { id: "setvan_dovom", name: "ستوان دوم" },
-  { id: "setvan_yekom", name: "ستوان یکم" },
-  { id: "sarvan", name: "سروان" },
-  { id: "sargord", name: "سرگرد" },
-  { id: "sarkhang_dovom", name: "سرهنگ دوم" },
-  { id: "sarkhang", name: "سرهنگ" },
-  { id: "sartip_dovom", name: "سرتیپ دوم" },
-  { id: "sartip", name: "سرتیپ" },
-  { id: "sarlashkar", name: "سرلشکر" },
-  { id: "sepahbod", name: "سپهبد" },
-  { id: "arteashbod", name: "ارتشبد" },
-];
-
 export const UserList = () => (
   <List>
     <Datagrid rowClick="edit">
-      <TextField source="id" label="شناسه" />
-      <TextField source="username" label="نام کاربری" />
-      <TextField source="name" label="نام" />
-      <TextField source="lastName" label="نام خانوادگی" />
-      <TextField source="rank" label="رتبه" />
-      <TextField source="nationalCode" label="کد ملی" />
-      <TextField source="role" label="نقش" />
-      <DateField source="createdAt" label="تاریخ ایجاد" />
+      <TextField source="id" />
+      <TextField source="username" />
+      <TextField source="name" />
+      <TextField source="lastName" />
+      <TextField source="rank" />
+      <TextField source="nationalCode" />
+      <RoleField source="role" />
+      <JalaliDateField source="createdAt" />
     </Datagrid>
   </List>
 );
@@ -70,20 +64,19 @@ const UserTitle = () => {
 export const UserEdit = () => (
   <Edit title={<UserTitle />}>
     <SimpleForm>
-      <TextInput source="username" label="نام کاربری" style={rtlInputStyle} />
-      <TextInput source="name" label="نام" style={rtlInputStyle} />
-      <TextInput source="lastName" label="نام خانوادگی" style={rtlInputStyle} />
-      <SelectInput
-        source="rank"
-        label="رتبه"
-        choices={rankChoices}
-        style={rtlInputStyle}
-      />
-      <TextInput source="nationalCode" label="کد ملی" style={rtlInputStyle} />
+      <TextInput source="username" style={rtlInputStyle} />
+      <TextInput source="name" style={rtlInputStyle} />
+      <TextInput source="lastName" style={rtlInputStyle} />
+      <SelectInput source="rank" choices={ranks} style={rtlInputStyle} />
+      <TextInput source="nationalCode" style={rtlInputStyle} />
       <SelectInput
         source="role"
-        label="نقش"
-        choices={roleChoices}
+        choices={[
+          { id: "superAdmin", name: "مدیر کل" },
+          { id: "admin", name: "مدیر" },
+          { id: "user", name: "کاربر" },
+          { id: "employee", name: "کارمند" },
+        ]}
         style={rtlInputStyle}
       />
     </SimpleForm>
@@ -93,20 +86,19 @@ export const UserEdit = () => (
 export const UserCreate = () => (
   <Create>
     <SimpleForm>
-      <TextInput source="username" label="نام کاربری" style={rtlInputStyle} />
-      <TextInput source="name" label="نام" style={rtlInputStyle} />
-      <TextInput source="lastName" label="نام خانوادگی" style={rtlInputStyle} />
-      <SelectInput
-        source="rank"
-        label="رتبه"
-        choices={rankChoices}
-        style={rtlInputStyle}
-      />
-      <TextInput source="nationalCode" label="کد ملی" style={rtlInputStyle} />
+      <TextInput source="username" style={rtlInputStyle} />
+      <TextInput source="name" style={rtlInputStyle} />
+      <TextInput source="lastName" style={rtlInputStyle} />
+      <SelectInput source="rank" choices={ranks} style={rtlInputStyle} />
+      <TextInput source="nationalCode" style={rtlInputStyle} />
       <SelectInput
         source="role"
-        label="نقش"
-        choices={roleChoices}
+        choices={[
+          { id: "superAdmin", name: "مدیر کل" },
+          { id: "admin", name: "مدیر" },
+          { id: "user", name: "کاربر" },
+          { id: "employee", name: "کارمند" },
+        ]}
         style={rtlInputStyle}
       />
     </SimpleForm>
