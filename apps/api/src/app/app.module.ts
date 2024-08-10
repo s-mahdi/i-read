@@ -21,6 +21,7 @@ import { join } from 'path';
 import { Schedule } from '../schedules/entities/schedule.entity';
 import { SchedulesModule } from '../schedules/schedules.module';
 import { RolesGuard } from '../auth/guards/role.guard';
+import { AnalyticsModule } from 'src/analytics/analytics.module';
 
 const serveStaticModule: DynamicModule[] =
   process.env.IS_INTRANET_MODE === 'true'
@@ -53,6 +54,7 @@ const serveStaticModule: DynamicModule[] =
     AuthModule,
     VersesModule,
     SchedulesModule,
+    AnalyticsModule,
     HttpModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
