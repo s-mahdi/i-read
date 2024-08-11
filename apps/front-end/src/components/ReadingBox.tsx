@@ -28,7 +28,7 @@ export const ReadingBox = ({
         (ref, index) =>
           ref !== null &&
           verses[index]?.suraId === playingIndex.suraId &&
-          verses[index].order === playingIndex.order
+          verses[index]?.order === playingIndex.order
       );
       if (currentVerseRef) {
         currentVerseRef.scrollIntoView({
