@@ -21,7 +21,11 @@ import { join } from 'path';
 import { Schedule } from '../schedules/entities/schedule.entity';
 import { SchedulesModule } from '../schedules/schedules.module';
 import { RolesGuard } from '../auth/guards/role.guard';
-import { AnalyticsModule } from 'src/analytics/analytics.module';
+import { AnalyticsModule } from '../analytics/analytics.module';
+import { ProvincesModule } from '../provinces/provinces.module';
+import { CountiesModule } from '../counties/counties.module';
+import { Province } from '../provinces/entities/province.entity';
+import { County } from '../counties/entities/county.entity';
 
 const serveStaticModule: DynamicModule[] =
   process.env.IS_INTRANET_MODE === 'true'
@@ -46,7 +50,7 @@ const serveStaticModule: DynamicModule[] =
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Verse, Schedule],
+      entities: [User, Verse, Schedule, Province, County],
       synchronize: true,
       logging: true,
     }),
@@ -55,6 +59,8 @@ const serveStaticModule: DynamicModule[] =
     VersesModule,
     SchedulesModule,
     AnalyticsModule,
+    ProvincesModule,
+    CountiesModule,
     HttpModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
