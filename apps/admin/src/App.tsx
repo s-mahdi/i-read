@@ -15,6 +15,8 @@ import { UserCreate, UserEdit, UserList } from "./components/users";
 import CustomLayout from "./components/CustomLayout";
 import farsiMessages from "./i18n/ra-langualge-farsi";
 import UserIcon from "@mui/icons-material/Group";
+import AnalyticsIcon from "@mui/icons-material/Assessment";
+import Analytics from "./resources/analytics/Analytics";
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl] });
 
@@ -58,6 +60,7 @@ const App = () => (
             edit={UserEdit}
             create={UserCreate}
           />
+          <Resource name="analytics" icon={AnalyticsIcon} list={Analytics} />
         </Admin>
       </StylesProvider>
     </ThemeProvider>

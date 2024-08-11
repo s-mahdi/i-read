@@ -214,6 +214,9 @@ const farsiMessages: TranslationMessages = {
         createdAt: "تاریخ ایجاد",
       },
     },
+    analytics: {
+      name: "تحلیل |||| تحلیل‌ها",
+    },
   },
 };
 
