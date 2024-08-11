@@ -26,6 +26,7 @@ import { ProvincesModule } from '../provinces/provinces.module';
 import { CountiesModule } from '../counties/counties.module';
 import { Province } from '../provinces/entities/province.entity';
 import { County } from '../counties/entities/county.entity';
+import { Unit } from '../units/entities/unit.entity';
 
 const serveStaticModule: DynamicModule[] =
   process.env.IS_INTRANET_MODE === 'true'
@@ -50,7 +51,7 @@ const serveStaticModule: DynamicModule[] =
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Verse, Schedule, Province, County],
+      entities: [User, Verse, Schedule, Province, County, Unit],
       synchronize: true,
       logging: true,
     }),
