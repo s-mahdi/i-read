@@ -77,7 +77,7 @@ export class UserService {
       savedUser.schedules = schedules;
       return manager.findOne(User, {
         where: { username: createUserDto.username },
-        relations: ['schedules'],
+        relations: ['schedules', 'province', 'county', 'unit'],
       });
     });
   }
@@ -87,7 +87,9 @@ export class UserService {
    * @returns promise of array of users
    */
   findAllUser(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      relations: ['province', 'county', 'unit'],
+    });
   }
 
   /**
@@ -98,7 +100,7 @@ export class UserService {
   findOne(id: number): Promise<User> {
     return this.userRepository.findOneOrFail({
       where: { id },
-      relations: ['schedules'],
+      relations: ['schedules', 'province', 'county', 'unit'],
       order: {
         schedules: {
           date: 'ASC',
