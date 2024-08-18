@@ -8,5 +8,6 @@ import { County } from './entities/county.entity';
   imports: [TypeOrmModule.forFeature([County])],
   controllers: [CountiesController],
   providers: [CountiesService],
+  exports: [CountiesService],
 })
 export class CountiesModule {}

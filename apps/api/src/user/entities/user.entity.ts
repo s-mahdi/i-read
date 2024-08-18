@@ -4,10 +4,14 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
   OneToMany,
 } from 'typeorm';
 import { Schedule } from '../../schedules/entities/schedule.entity';
 import { Role } from '../../@types/roles.enum';
+import { Province } from '../../provinces/entities/province.entity';
+import { County } from '../../counties/entities/county.entity';
+import { Unit } from '../../units/entities/unit.entity';
 
 @Entity()
 export class User {
@@ -39,6 +43,15 @@ export class User {
     default: Role.User,
   })
   role: Role;
+
+  @ManyToOne(() => Province, { nullable: true })
+  province?: Province;
+
+  @ManyToOne(() => County, { nullable: true })
+  county?: County;
+
+  @ManyToOne(() => Unit, { nullable: true })
+  unit?: Unit;
 
   @CreateDateColumn()
   createdAt: Date;

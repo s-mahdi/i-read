@@ -27,6 +27,7 @@ import { CountiesModule } from '../counties/counties.module';
 import { Province } from '../provinces/entities/province.entity';
 import { County } from '../counties/entities/county.entity';
 import { Unit } from '../units/entities/unit.entity';
+import { UnitsModule } from '../units/units.module';
 
 const serveStaticModule: DynamicModule[] =
   process.env.IS_INTRANET_MODE === 'true'
@@ -62,6 +63,7 @@ const serveStaticModule: DynamicModule[] =
     AnalyticsModule,
     ProvincesModule,
     CountiesModule,
+    UnitsModule,
     HttpModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
