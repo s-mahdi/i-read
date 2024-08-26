@@ -11,7 +11,7 @@ export class ProvincesService {
   ) {}
 
   findAll(): Promise<Province[]> {
-    return this.provincesRepository.find({ relations: ['counties'] });
+    return this.provincesRepository.find();
   }
 
   findOne(id: number): Promise<Province> {

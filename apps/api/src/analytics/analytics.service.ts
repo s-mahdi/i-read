@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { AnalyticsData } from '../@types/analytics.inreface';
+import { AnalyticsData } from '../@types/analytics.interface';
 
 @Injectable()
 export class AnalyticsService {
