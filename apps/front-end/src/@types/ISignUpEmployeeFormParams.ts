@@ -5,4 +5,7 @@ export interface ISignUpEmployeeFormParams {
   password: string;
   rank: string;
   nationalCode: string;
+  province?: string;
+  county?: string;
+  unit?: string;
 }
