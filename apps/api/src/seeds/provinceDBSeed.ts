@@ -11,6 +11,12 @@ const seedDatabase = async () => {
   const entityManager = app.get(EntityManager);
 
   try {
+    const provincesRepository = entityManager.getRepository(Province);
+    const countiesRepository = entityManager.getRepository(County);
+
+    await countiesRepository.delete({});
+    await provincesRepository.delete({});
+
     const filePath = join(__dirname, '../assets', 'iran.json');
     const jsonData = await fs.readFile(filePath, 'utf8');
     const provincesData = JSON.parse(jsonData);
