@@ -28,11 +28,12 @@ const cacheRtl = createCache({
 const theme = createTheme({
   direction: "rtl",
   palette: {
+    mode: "light",
     primary: {
-      main: "#3f51b5",
+      main: "#32B7C5",
     },
     secondary: {
-      main: "#f50057",
+      main: "#1B3A4B",
     },
   },
   typography: {
@@ -52,6 +53,7 @@ const App = () => (
           authProvider={authProvider}
           loginPage={AdminLoginPage}
           i18nProvider={i18nProvider}
+          theme={theme}
         >
           <Resource
             name="user"

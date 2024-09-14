@@ -7,6 +7,7 @@ import {
   TextField,
   Button,
   Typography,
+  Container,
 } from "@mui/material";
 import { axiosClient } from "../api/axiosClient";
 
@@ -36,35 +37,44 @@ const AdminLoginPage: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Card>
+    <Container
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Card sx={{ maxWidth: "lg" }}>
         <CardContent>
-          <Typography variant="h5" component="h2">
-            ورود ادمین
-          </Typography>
-          <TextField
-            label="نام کاربری"
-            fullWidth
-            margin="normal"
-            {...register("username", { required: "نام کاربری الزامی است" })}
-            error={!!errors.username}
-            helperText={errors.username ? errors.username.message : ""}
-          />
-          <TextField
-            label="کلمه عبور"
-            type="password"
-            fullWidth
-            margin="normal"
-            {...register("password", { required: "کلمه عبور الزامی است" })}
-            error={!!errors.password}
-            helperText={errors.password ? errors.password.message : ""}
-          />
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            ورود
-          </Button>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Typography variant="h5" component="h2">
+              ورود ادمین
+            </Typography>
+            <TextField
+              label="نام کاربری"
+              fullWidth
+              margin="normal"
+              {...register("username", { required: "نام کاربری الزامی است" })}
+              error={!!errors.username}
+              helperText={errors.username ? errors.username.message : ""}
+            />
+            <TextField
+              label="کلمه عبور"
+              type="password"
+              fullWidth
+              margin="normal"
+              {...register("password", { required: "کلمه عبور الزامی است" })}
+              error={!!errors.password}
+              helperText={errors.password ? errors.password.message : ""}
+            />
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              ورود
+            </Button>
+          </form>
         </CardContent>
       </Card>
-    </form>
+    </Container>
   );
 };
 
