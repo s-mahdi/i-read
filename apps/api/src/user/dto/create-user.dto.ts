@@ -4,6 +4,7 @@ import {
   Matches,
   IsEnum,
   IsOptional,
+  IsNumber,
 } from 'class-validator';
 import { IsValidNationalCode } from '../../decorators/isValidNationalCode.decorator';
 import { IsValidPhoneNumber } from '../../decorators/isValidPhoneNumber.decorator';
@@ -39,4 +40,16 @@ export class CreateUserDto {
   @IsEnum(Role)
   @IsOptional()
   role?: Role;
+
+  @IsOptional()
+  @IsNumber({}, { message: 'شناسه استان باید عدد باشد.' })
+  province?: number;
+
+  @IsOptional()
+  @IsNumber({}, { message: 'شناسه شهرستان باید عدد باشد.' })
+  county?: number;
+
+  @IsOptional()
+  @IsNumber({}, { message: 'شناسه واحد باید عدد باشد.' })
+  unit?: number;
 }
