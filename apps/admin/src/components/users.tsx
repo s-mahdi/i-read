@@ -15,10 +15,9 @@ import RoleField from "./RoleField"; // Import custom role field
 import { IUser } from "../@types/IUser";
 
 const ranks = [
-  { id: "سرباز دوم", name: "سرباز دوم" },
-  { id: "سرباز یکم", name: "سرباز یکم" },
-  { id: "سرجوخه", name: "سرجوخه" },
-  { id: "گروهبان سوم", name: "گروهبان سوم" },
+  { id: "سرباز", name: "سرباز" },
+  { id: "کارمند", name: "کارمند" },
+  { id: "روحانی", name: "روحانی" },
   { id: "گروهبان دوم", name: "گروهبان دوم" },
   { id: "گروهبان یکم", name: "گروهبان یکم" },
   { id: "استوار دوم", name: "استوار دوم" },
