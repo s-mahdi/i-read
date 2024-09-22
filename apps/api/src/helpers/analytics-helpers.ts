@@ -1,3 +1,6 @@
+import { User } from '../user/entities/user.entity';
+import { Repository } from 'typeorm';
+
 export function getWeekNumber(date: Date): number {
   const targetDate = new Date(date);
   targetDate.setHours(0, 0, 0, 0);
@@ -9,21 +12,50 @@ export function getWeekNumber(date: Date): number {
   );
 }
 
-export function getLast30DaysRegistrationCount(users: any[]) {
-  const today = new Date();
-  const dateCounts: Record<string, number> = {};
+export async function getLast30DaysRegistrationCount(
+  userRepository: Repository<User>,
+  startDate: Date,
+  endDate: Date,
+): Promise<{ date: string; count: number }[]> {
+  // Query to get the count of users grouped by date using PostgreSQL's DATE_TRUNC function
+  const rawData = await userRepository
+    .createQueryBuilder('user')
+    .select("TO_CHAR(DATE_TRUNC('day', user.createdAt), 'YYYY-MM-DD')", 'date')
+    .addSelect('COUNT(*)', 'count')
+    .where('user.createdAt BETWEEN :startDate AND :endDate', {
+      startDate,
+      endDate,
+    })
+    .groupBy('date')
+    .orderBy('date', 'ASC')
+    .getRawMany();
 
-  users.forEach((user) => {
-    const userDate = new Date(user.createdAt).toISOString().split('T')[0];
-    dateCounts[userDate] = (dateCounts[userDate] || 0) + 1;
+  // Create a map from the raw data
+  const countsMap: Record<string, number> = {};
+  rawData.forEach((entry) => {
+    const date = entry.date; // Date is already formatted as 'YYYY-MM-DD'
+    countsMap[date] = Number(entry.count);
   });
 
-  const last30Days = Array.from({ length: 30 }, (_, i) => {
-    const date = new Date(today);
-    date.setDate(today.getDate() - i);
+  // Generate the last 30 days array with counts
+  const last30Days = [];
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date(endDate);
+    date.setDate(endDate.getDate() - i);
     const formattedDate = date.toISOString().split('T')[0];
-    return { date: formattedDate, count: dateCounts[formattedDate] || 0 };
-  }).reverse();
+    last30Days.push({
+      date: formattedDate,
+      count: countsMap[formattedDate] || 0,
+    });
+  }
 
   return last30Days;
+}
+
+export function getStartOfWeek(date: Date): Date {
+  const dayOfWeek = date.getDay(); // 0 (Sunday) to 6 (Saturday)
+  const startOfWeek = new Date(date);
+  startOfWeek.setDate(date.getDate() - dayOfWeek);
+  startOfWeek.setHours(0, 0, 0, 0);
+  return startOfWeek;
 }

@@ -15,4 +15,10 @@ export class AnalyticsController {
   getAnalytics() {
     return this.analyticsService.getAnalytics();
   }
+
+  @Get('provinces')
+  @Roles(Role.Admin, Role.SuperAdmin)
+  getProvincesAnalytics() {
+    return this.analyticsService.getProvincesAnalytics();
+  }
 }
