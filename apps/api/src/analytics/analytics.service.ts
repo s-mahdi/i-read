@@ -7,12 +7,15 @@ import {
 import { User } from '../user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Province } from '../provinces/entities/province.entity';
 
 @Injectable()
 export class AnalyticsService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Province)
+    private provinceRepository: Repository<Province>,
   ) {}
 
   async getAnalytics(): Promise<AnalyticsData> {
@@ -55,15 +58,19 @@ export class AnalyticsService {
   }
 
   // Fetch analytics data for provinces
-  async getProvincesAnalytics() {
+  async getProvincesAnalytics({
+    page = 1,
+    limit = 10,
+    sort = 'province_name',
+    order = 'ASC',
+  }) {
     try {
-      // Current date for filtering schedules
       const currentDate = new Date();
 
-      // Aggregate data per province
-      const provincesAnalytics = await this.userRepository
-        .createQueryBuilder('user')
-        .leftJoin('user.province', 'province')
+      // Build the subquery with grouping and aggregation
+      const subQuery = this.provinceRepository
+        .createQueryBuilder('province')
+        .leftJoin('province.users', 'user')
         .leftJoin(
           'user.schedules',
           'schedule',
@@ -72,40 +79,86 @@ export class AnalyticsService {
             currentDate,
           },
         )
-        .select('province.id', 'provinceId')
-        .addSelect('province.name', 'provinceName')
-        .addSelect('COUNT(DISTINCT user.id)', 'numberOfUsers')
-        .addSelect(
-          'COUNT(DISTINCT CASE WHEN schedule.id IS NOT NULL THEN schedule.id END)',
-          'totalSchedules',
-        )
+        .select('province.id', 'province_id')
+        .addSelect('province.name', 'province_name')
+        .addSelect('COUNT(DISTINCT user.id)', 'number_of_users')
+        .addSelect('COUNT(DISTINCT schedule.id)', 'total_schedules')
         .addSelect(
           'COUNT(DISTINCT CASE WHEN schedule.isRead = true THEN schedule.id END)',
-          'doneSchedules',
+          'done_schedules',
         )
-        .where('province.id IS NOT NULL')
+        .addSelect(
+          `CASE WHEN COUNT(DISTINCT schedule.id) > 0
+            THEN COUNT(DISTINCT CASE WHEN schedule.isRead = true THEN schedule.id END)::float / COUNT(DISTINCT schedule.id)
+            ELSE 0 END`,
+          'activity_rate',
+        )
         .groupBy('province.id')
-        .addGroupBy('province.name')
-        .getRawMany();
+        .addGroupBy('province.name');
 
-      // Calculate activity rate for each province
+      // Build the main query selecting from the subquery
+      const mainQuery = this.provinceRepository
+        .createQueryBuilder()
+        .select('*')
+        .from(`(${subQuery.getQuery()})`, 'sub')
+        .setParameters(subQuery.getParameters());
+
+      // Sorting logic
+      const sortFields = {
+        province_id: 'province_id',
+        province_name: 'province_name',
+        number_of_users: 'number_of_users',
+        total_schedules: 'total_schedules',
+        done_schedules: 'done_schedules',
+        activity_rate: 'activity_rate',
+      };
+
+      if (sortFields[sort]) {
+        if (sort === 'province_name') {
+          mainQuery.orderBy(
+            `sub.province_name COLLATE "fa-IR-x-icu"`,
+            order.toUpperCase() as 'ASC' | 'DESC',
+          );
+        } else {
+          mainQuery.orderBy(
+            `sub.${sortFields[sort]}`,
+            order.toUpperCase() as 'ASC' | 'DESC',
+          );
+        }
+      }
+
+      // Get total number of items
+      const totalItemsResult = await mainQuery.getRawMany();
+      const totalItems = totalItemsResult.length;
+
+      // Apply pagination
+      mainQuery.skip((page - 1) * limit).take(limit);
+
+      // Get paginated data
+      const provincesAnalytics = await mainQuery.getRawMany();
+
+      // Map results
       const analyticsWithActivityRate = provincesAnalytics.map((item) => {
-        const totalSchedules = Number(item.totalSchedules) || 0;
-        const doneSchedules = Number(item.doneSchedules) || 0;
-        const activityRate =
-          totalSchedules > 0 ? doneSchedules / totalSchedules : 0;
-
         return {
-          provinceId: Number(item.provinceId),
-          provinceName: item.provinceName,
-          numberOfUsers: Number(item.numberOfUsers),
-          totalSchedules,
-          doneSchedules,
-          activityRate,
+          provinceId: Number(item.province_id),
+          provinceName: item.province_name,
+          numberOfUsers: Number(item.number_of_users),
+          totalSchedules: Number(item.total_schedules),
+          doneSchedules: Number(item.done_schedules),
+          activityRate: Number(item.activity_rate),
         };
       });
 
-      return analyticsWithActivityRate;
+      return {
+        data: analyticsWithActivityRate,
+        meta: {
+          totalItems,
+          itemCount: analyticsWithActivityRate.length,
+          itemsPerPage: limit,
+          totalPages: Math.ceil(totalItems / limit),
+          currentPage: page,
+        },
+      };
     } catch (error) {
       console.error('Error fetching provinces analytics:', error);
       throw new Error('Failed to fetch provinces analytics data');
