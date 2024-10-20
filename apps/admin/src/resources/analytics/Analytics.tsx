@@ -12,7 +12,6 @@ const Analytics = () => {
   if (isLoading) return <div>در حال بارگذاری...</div>;
   if (error) return <div>خطا در بارگذاری آنالیز</div>;
 
-  // Convert dates to Jalali
   const chartData = {
     labels:
       analytics?.last30DaysCount?.map((item) =>

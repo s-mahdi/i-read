@@ -217,6 +217,16 @@ const farsiMessages: TranslationMessages = {
     analytics: {
       name: "تحلیل |||| تحلیل‌ها",
     },
+    "analytics/provinces": {
+      name: "داده‌های استانی",
+      fields: {
+        provinceName: "استان",
+        numberOfUsers: "تعداد کاربرها",
+        totalSchedules: "تعداد برنامه‌های قرائت",
+        doneSchedules: "قرائت‌های انجام شده",
+        activityRate: "امتیاز از ۱۰۰",
+      },
+    },
   },
 };
 

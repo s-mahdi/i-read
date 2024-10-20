@@ -17,6 +17,7 @@ import farsiMessages from "./i18n/ra-langualge-farsi";
 import UserIcon from "@mui/icons-material/Group";
 import AnalyticsIcon from "@mui/icons-material/Assessment";
 import Analytics from "./resources/analytics/Analytics";
+import ProvinceAnalytics from "./resources/analytics/ProvinceAnalytics";
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl] });
 
@@ -63,6 +64,11 @@ const App = () => (
             create={UserCreate}
           />
           <Resource name="analytics" icon={AnalyticsIcon} list={Analytics} />
+          <Resource
+            name="analytics/provinces"
+            icon={AnalyticsIcon}
+            list={ProvinceAnalytics}
+          />
         </Admin>
       </StylesProvider>
     </ThemeProvider>

@@ -24,10 +24,12 @@ const dataProvider: DataProvider = {
 
     const url = `/${resource}?${stringify(query)}`;
 
-    const { data } = await axiosClient.get(url);
+    const response = await axiosClient.get(url);
+    const responseData = response.data;
+
     return {
-      data,
-      total: data.length,
+      data: responseData.data,
+      total: responseData.meta.total,
     };
   },
 
