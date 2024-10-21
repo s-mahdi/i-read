@@ -29,7 +29,7 @@ const dataProvider: DataProvider = {
 
     return {
       data: responseData.data,
-      total: responseData.meta.total,
+      total: responseData.meta.total || undefined,
     };
   },
 
