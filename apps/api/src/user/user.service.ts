@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -7,7 +8,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { getDates } from '../utils/calendarUtils';
 import { VersesService } from '../verses/verses.service';
@@ -17,6 +17,10 @@ import { Schedule } from '../schedules/entities/schedule.entity';
 import { County } from '../counties/entities/county.entity';
 import { Unit } from '../units/entities/unit.entity';
 import { Province } from '../provinces/entities/province.entity';
+import { IFindAllUserOptions } from './@types/IFindAllUserOptions';
+import { IPaginatedResponse } from 'src/@types/IPaginatedResponse';
+import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { applySorting } from '../helpers/analytics-helpers';
 
 @Injectable()
 export class UserService {
@@ -137,10 +141,44 @@ export class UserService {
    * this function is used to get all the user's list
    * @returns promise of array of users
    */
-  findAllUser(): Promise<User[]> {
-    return this.userRepository.find({
-      relations: ['province', 'county', 'unit'],
-    });
+  async findAllUser(
+    options: IFindAllUserOptions,
+  ): Promise<IPaginatedResponse<User>> {
+    const { page = 1, limit = 50, sort = 'id', order = 'ASC' } = options;
+
+    const queryBuilder = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.province', 'province')
+      .leftJoinAndSelect('user.county', 'county')
+      .leftJoinAndSelect('user.unit', 'unit');
+
+    try {
+      // Apply sorting using the helper
+      applySorting(queryBuilder, sort, order);
+
+      // Get total count
+      const totalItems = await queryBuilder.getCount();
+
+      // Apply pagination
+      queryBuilder.skip((page - 1) * limit).take(limit);
+
+      // Execute query
+      const users = await queryBuilder.getMany();
+
+      return {
+        data: users,
+        meta: {
+          total: totalItems,
+          itemCount: users.length,
+          itemsPerPage: limit,
+          totalPages: Math.ceil(totalItems / limit),
+          currentPage: page,
+        },
+      };
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      throw new BadRequestException(error.message);
+    }
   }
 
   /**
@@ -171,7 +209,10 @@ export class UserService {
    * @param updateUserDto this is partial type of createUserDto.
    * @returns promise of udpate user
    */
-  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateUser(
+    id: number,
+    updateUserDto: UpdateEmployeeDto,
+  ): Promise<User> {
     // Fetch the existing user by ID
     const user = await this.userRepository.findOne({
       where: { id },
@@ -186,6 +227,7 @@ export class UserService {
     user.name = updateUserDto.name ?? user.name;
     user.username = updateUserDto.username ?? user.username;
     user.password = updateUserDto.password ?? user.password;
+    console.log('updateUserDto: ', updateUserDto);
 
     // Update province if provided
     if (updateUserDto.province) {
@@ -220,6 +262,10 @@ export class UserService {
       user.unit = unit;
     }
 
+    // update rank
+    if (updateUserDto.rank) {
+      user.rank = updateUserDto.rank;
+    }
     // Save the updated user with related entities
     return await this.userRepository.save(user);
   }

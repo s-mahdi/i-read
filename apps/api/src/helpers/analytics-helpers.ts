@@ -59,3 +59,78 @@ export function getStartOfWeek(date: Date): Date {
   startOfWeek.setHours(0, 0, 0, 0);
   return startOfWeek;
 }
+
+export const ranks = [
+  'کارمند',
+  'روحانی',
+  'سرباز',
+  'گروهبان دوم',
+  'گروهبان یکم',
+  'استوار دوم',
+  'استوار یکم',
+  'ستوان سوم',
+  'ستوان دوم',
+  'ستوان یکم',
+  'سروان',
+  'سرگرد',
+  'سرهنگ دوم',
+  'سرهنگ',
+  'سرتیپ دوم',
+  'سرتیپ',
+  'سرلشکر',
+  'سپهبد',
+  'ارتشبد',
+];
+
+// Create a mapping for rank order
+const rankOrderMapping: Record<string, number> = ranks.reduce(
+  (acc, rank, index) => {
+    acc[rank] = index + 1;
+    return acc;
+  },
+  {} as Record<string, number>,
+);
+
+/**
+ * Applies sorting to the query builder.
+ * @param queryBuilder TypeORM QueryBuilder instance
+ * @param sortField Field to sort by
+ * @param sortOrder Order direction ('ASC' or 'DESC')
+ */
+export const applySorting = (
+  queryBuilder: any,
+  sortField: string,
+  sortOrder: 'ASC' | 'DESC',
+) => {
+  // Define sortable fields
+  const sortFields: Record<string, string> = {
+    id: 'user.id',
+    username: 'user.username',
+    email: 'user.email',
+    name: 'user.name',
+    lastName: 'user.lastName',
+    rank: 'user.rank',
+    // Add more sortable fields as needed
+  };
+
+  if (sortField === 'rank') {
+    // Build CASE statement for rank sorting
+    const caseStatement = Object.entries(rankOrderMapping)
+      .map(
+        ([rank, orderValue]) => `WHEN user.rank = '${rank}' THEN ${orderValue}`,
+      )
+      .join(' ');
+
+    const rankOrderSql = `CASE ${caseStatement} ELSE ${ranks.length + 1} END`;
+
+    // Add the CASE statement as a computed column
+    queryBuilder.addSelect(`${rankOrderSql}`, 'rank_order');
+
+    // Order by the computed column
+    queryBuilder.orderBy('rank_order', sortOrder);
+  } else if (sortFields[sortField]) {
+    queryBuilder.orderBy(sortFields[sortField], sortOrder);
+  } else {
+    throw new Error(`Invalid sort field: ${sortField}`);
+  }
+};
