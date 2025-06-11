@@ -56,9 +56,13 @@ This platform provides:
 # Install dependencies
 yarn install
 
-# Set up environment variables
+# Set up environment variables for each application
 cp apps/api/.env.example apps/api/.env
 cp apps/front-end/.env.example apps/front-end/.env
+cp apps/static-api/.env.example apps/static-api/.env
+cp apps/admin/.env.example apps/admin/.env
+
+# Edit each .env file with your actual configuration values
 ```
 
 ### Running the Applications
